@@ -1,0 +1,11 @@
+# Agent skills, rules, Obsidian vault & PRD (local only)
+.agents/
+AGENTS.md
+OmprengQ_Vault/
+prd-gizi-mbg/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+!.env.example
