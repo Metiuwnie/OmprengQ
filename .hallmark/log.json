@@ -1,0 +1,24 @@
+[
+ {
+  "shape": "Workbench",
+  "theme": "hum",
+  "axes": "light/rounded-sans/chromatic-yellow",
+  "hero": "Settled",
+  "nav": "edge-aligned",
+  "footer": "mast",
+  "imagery": "the product",
+  "photos": [],
+  "entry": "apps/web/src/styles/tokens.css",
+  "fingerprint": "omprengq-m0-setup",
+  "sections": [
+   "Hero",
+   "DesignSystemShowcase",
+   "Footer"
+  ],
+  "signature": "Dual-mode Anak & Remaja nutrition fulfillment progress bar",
+  "waived": [],
+  "prompt": "OmprengQ M0 design system & tokens",
+  "date": "2026-11-23",
+  "mode": "build"
+ }
+]

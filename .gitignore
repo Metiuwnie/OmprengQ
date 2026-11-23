@@ -9,3 +9,14 @@ prd-gizi-mbg/
 .env.local
 .env.*.local
 !.env.example
+
+# Dependencies & build outputs
+node_modules/
+dist/
+.vite/
+coverage/
+*.tsbuildinfo
+
+# OS files
+.DS_Store
+Thumbs.db
