@@ -6,6 +6,7 @@ import { menuRoutes } from "./routes/admin/menus.js";
 import { schoolRoutes } from "./routes/admin/schools.js";
 import { sppgRoutes } from "./routes/admin/sppg.js";
 import { createAuthRoutes } from "./routes/auth.js";
+import { publicRoutes } from "./routes/public.js";
 
 const app = new Hono()
   .basePath("/api")
@@ -15,6 +16,7 @@ const app = new Hono()
     return c.json(payload);
   })
   .route("/auth", createAuthRoutes())
+  .route("/public", publicRoutes)
   .route("/admin/sppg", sppgRoutes)
   .route("/admin/schools", schoolRoutes)
   .route("/admin/foods", foodRoutes)
