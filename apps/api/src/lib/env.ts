@@ -50,3 +50,8 @@ export function isCookieSecure(): boolean {
   ensureEnvLoaded();
   return process.env.COOKIE_SECURE === "true";
 }
+
+export function getAppBaseUrl(): string {
+  ensureEnvLoaded();
+  return (process.env.APP_BASE_URL?.trim() || "http://localhost:5173").replace(/\/+$/, "");
+}

@@ -1,6 +1,6 @@
 import type { AuthUser } from "@mbg/shared";
-import { CalendarDays, CheckCircle2, Database, QrCode, ShieldCheck } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
+import { Apple, Building2, CalendarDays, CheckCircle2, Database, QrCode, ShieldCheck } from "lucide-react";
+import { Link, useOutletContext } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getRoleLabel } from "@/features/admin/lib/role-label";
@@ -82,30 +82,88 @@ export function AdminPage() {
         </Card>
       </section>
 
-      <section aria-label="Rencana fitur M2" className="grid gap-4 sm:grid-cols-2">
+      <section aria-label="Menu cepat operasional" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <CalendarDays className="h-5 w-5 text-primary" aria-hidden="true" />
-              Editor Menu Harian (M2)
+              Menu Harian
             </CardTitle>
             <CardDescription>
               Susun komposisi bahan per jenjang dan lihat perkiraan total gizi otomatis berbasis TKPI.
             </CardDescription>
           </CardHeader>
+          <CardContent>
+            <Link
+              to="/admin/menus"
+              className="inline-flex min-h-11 items-center rounded-md border border-border bg-secondary px-4 text-sm font-semibold text-foreground hover:bg-secondary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5"
+            >
+              Buka Kalender Menu
+            </Link>
+          </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <QrCode className="h-5 w-5 text-primary" aria-hidden="true" />
-              Sekolah &amp; Cetak QR (M2)
+              Sekolah &amp; QR Cetak
             </CardTitle>
             <CardDescription>
               Kelola daftar sekolah binaan SPPG serta unduh poster QR siap cetak untuk ruang kelas.
             </CardDescription>
           </CardHeader>
+          <CardContent>
+            <Link
+              to="/admin/schools"
+              className="inline-flex min-h-11 items-center rounded-md border border-border bg-secondary px-4 text-sm font-semibold text-foreground hover:bg-secondary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5"
+            >
+              Kelola Sekolah &amp; QR
+            </Link>
+          </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Apple className="h-5 w-5 text-primary" aria-hidden="true" />
+              Bahan Pangan TKPI
+            </CardTitle>
+            <CardDescription>
+              Telusuri referensi TKPI dan tambahkan bahan custom sesuai olahan dapur SPPG.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link
+              to="/admin/foods"
+              className="inline-flex min-h-11 items-center rounded-md border border-border bg-secondary px-4 text-sm font-semibold text-foreground hover:bg-secondary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5"
+            >
+              Buka Bahan TKPI
+            </Link>
+          </CardContent>
+        </Card>
+
+        {user.role === "super_admin" && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Building2 className="h-5 w-5 text-primary" aria-hidden="true" />
+                Kelola SPPG
+              </CardTitle>
+              <CardDescription>
+                Tambah atau perbarui unit SPPG yang menaungi sekolah dan menu harian.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link
+                to="/admin/sppg"
+                className="inline-flex min-h-11 items-center rounded-md border border-border bg-secondary px-4 text-sm font-semibold text-foreground hover:bg-secondary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5"
+              >
+                Buka Daftar SPPG
+              </Link>
+            </CardContent>
+          </Card>
+        )}
       </section>
     </div>
   );

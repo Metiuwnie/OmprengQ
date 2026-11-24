@@ -78,31 +78,67 @@ export function AdminLayout({ user }: AdminLayoutProps) {
             <span>Ringkasan</span>
           </NavLink>
 
-          <div className="pt-4">
-            <p className="px-3 pb-1.5 text-xs font-medium text-muted-foreground">
-              Modul berikutnya (M2)
-            </p>
-            <ul className="space-y-1">
-              <li className="flex min-h-11 items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground">
-                <CalendarDays className="h-4 w-4 shrink-0" aria-hidden="true" />
-                <span>Menu Harian</span>
-              </li>
-              <li className="flex min-h-11 items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground">
-                <School className="h-4 w-4 shrink-0" aria-hidden="true" />
-                <span>Sekolah &amp; QR</span>
-              </li>
-              <li className="flex min-h-11 items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground">
-                <Apple className="h-4 w-4 shrink-0" aria-hidden="true" />
-                <span>Bahan TKPI</span>
-              </li>
-              {user.role === "super_admin" && (
-                <li className="flex min-h-11 items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground">
-                  <Building2 className="h-4 w-4 shrink-0" aria-hidden="true" />
-                  <span>Kelola SPPG</span>
-                </li>
-              )}
-            </ul>
-          </div>
+          <NavLink
+            to="/admin/menus"
+            onClick={() => setMobileMenuOpen(false)}
+            className={({ isActive }) =>
+              `flex min-h-11 items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold transition-[background-color,color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 ${
+                isActive
+                  ? "bg-primary text-primary-foreground"
+                  : "text-foreground hover:bg-secondary"
+              }`
+            }
+          >
+            <CalendarDays className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>Menu Harian</span>
+          </NavLink>
+
+          <NavLink
+            to="/admin/schools"
+            onClick={() => setMobileMenuOpen(false)}
+            className={({ isActive }) =>
+              `flex min-h-11 items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold transition-[background-color,color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 ${
+                isActive
+                  ? "bg-primary text-primary-foreground"
+                  : "text-foreground hover:bg-secondary"
+              }`
+            }
+          >
+            <School className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>Sekolah &amp; QR</span>
+          </NavLink>
+
+          <NavLink
+            to="/admin/foods"
+            onClick={() => setMobileMenuOpen(false)}
+            className={({ isActive }) =>
+              `flex min-h-11 items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold transition-[background-color,color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 ${
+                isActive
+                  ? "bg-primary text-primary-foreground"
+                  : "text-foreground hover:bg-secondary"
+              }`
+            }
+          >
+            <Apple className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>Bahan TKPI</span>
+          </NavLink>
+
+          {user.role === "super_admin" && (
+            <NavLink
+              to="/admin/sppg"
+              onClick={() => setMobileMenuOpen(false)}
+              className={({ isActive }) =>
+                `flex min-h-11 items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold transition-[background-color,color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 ${
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "text-foreground hover:bg-secondary"
+                }`
+              }
+            >
+              <Building2 className="h-4 w-4 shrink-0" aria-hidden="true" />
+              <span>Kelola SPPG</span>
+            </NavLink>
+          )}
         </nav>
       </div>
 
@@ -118,12 +154,12 @@ export function AdminLayout({ user }: AdminLayoutProps) {
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
-      <aside className="hidden w-64 shrink-0 border-r border-border bg-card lg:block">
+      <aside className="no-print hidden w-64 shrink-0 border-r border-border bg-card lg:block">
         {navContent}
       </aside>
 
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[400] flex lg:hidden">
+        <div className="no-print fixed inset-0 z-[400] flex lg:hidden">
           <div
             className="fixed inset-0 bg-foreground/40"
             aria-hidden="true"
@@ -139,7 +175,7 @@ export function AdminLayout({ user }: AdminLayoutProps) {
       )}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-[200] border-b border-border bg-card/95 backdrop-blur-xs">
+        <header className="no-print sticky top-0 z-[200] border-b border-border bg-card/95 backdrop-blur-xs">
           <div className="flex min-h-16 items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
             <div className="flex min-w-0 items-center gap-2.5">
               <button

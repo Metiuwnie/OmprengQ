@@ -82,3 +82,18 @@ h4 {
     scroll-behavior: auto !important;
   }
 }
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: var(--background);
+  }
+  .qr-print-sheet {
+    border: 0 !important;
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    max-width: 100% !important;
+  }
+}
