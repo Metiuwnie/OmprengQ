@@ -9,14 +9,42 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_DATABASE: omprengq
+          MYSQL_USER: omprengq
+          MYSQL_PASSWORD: omprengq
+          MYSQL_ROOT_PASSWORD: omprengq_root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -P 3306 -uomprengq -pomprengq"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=15
+    env:
+      DATABASE_URL: mysql://omprengq:omprengq@127.0.0.1:3306/omprengq
+      JWT_SECRET: ci-test-jwt-secret-omprengq-32chars-minimum
+      COOKIE_SECURE: "false"
+      APP_BASE_URL: http://localhost:5173
+      PORT: "3000"
+      SEED_SUPER_ADMIN_EMAIL: superadmin@omprengq.local
+      SEED_SUPER_ADMIN_PASSWORD: ci-test-superadmin-password
+      SEED_SPPG_ADMIN_EMAIL: admin.sppg@omprengq.local
+      SEED_SPPG_ADMIN_PASSWORD: ci-test-sppg-password
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm lint
+      - run: pnpm db:migrate
+      - run: pnpm db:seed
       - run: pnpm test
+      - run: pnpm build
