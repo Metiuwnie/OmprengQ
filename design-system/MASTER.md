@@ -17,34 +17,19 @@
 - **Performance:** cost:low | drivers:none
 - **Accessibility:** requires contrast-text-4.5, keyboard, visible-focus, reduced-motion
 
-### Colors
-| Role | Hex | CSS Variable |
-|------|-----|--------------|
-| Primary | `#4F46E5` | `--color-primary` |
-| On Primary | `#FFFFFF` | `--color-on-primary` |
-| Secondary | `#818CF8` | `--color-secondary` |
-| On Secondary | `#0F172A` | `--color-on-secondary` |
-| Accent/CTA | `#EA580C` | `--color-accent` |
-| On Accent/CTA | `#000000` | `--color-on-accent` |
-| Background | `#EEF2FF` | `--color-background` |
-| Foreground | `#1E1B4B` | `--color-foreground` |
-| Card | `#FFFFFF` | `--color-card` |
-| Card Foreground | `#1E1B4B` | `--color-card-foreground` |
-| Muted | `#EBEEF8` | `--color-muted` |
-| Muted Foreground | `#475569` | `--color-muted-foreground` |
-| Border | `#C7D2FE` | `--color-border` |
-| Destructive | `#DC2626` | `--color-destructive` |
-| On Destructive | `#FFFFFF` | `--color-on-destructive` |
-| Ring | `#4F46E5` | `--color-ring` |
-
-*Notes: Playful indigo + energetic orange [Accent adjusted from #F97316].*
+### Colors & Claymorphism Palette (diselaraskan dengan maskot 3D & referensi)
+Seluruh warna didefinisikan lewat token OKLCH di `apps/web/src/styles/tokens.css` dan dipetakan di `apps/web/src/index.css`:
+- **Kanvas Langit Pastel (`--color-paper`):** `oklch(95% 0.026 238)` — lembut, terang, kontras tinggi untuk kartu putih clay.
+- **Permukaan Kartu Clay (`--color-card` + `--clay-rim`):** `oklch(99.6% 0.004 240)` dengan pinggiran cahaya `2px` dan `--shadow-clay-card` (bayangan luar lembut + bevel dalam atas/bawah).
+- **Primary Leaf Green (`--color-accent-2`):** `oklch(50% 0.16 148)` (teks putih, kontras >= 4.5:1) untuk aksi utama dan item navigasi aktif.
+- **Accent Sunny Gold (`--color-accent`):** `oklch(86% 0.175 88)` untuk badge, ikon utama, dan sorotan hangat.
+- **Secondary Coral Berry (`--color-coral`):** `oklch(60% 0.195 22)` & **Mint (`--color-mint`):** `oklch(88% 0.105 148)` untuk pembeda kartu gizi dan status positif.
+- **Maskot Resmi 3D Clay:** `/mascots/mascot-sayur.png` dan `/mascots/mascot-ayam.png` (`apps/web/public/mascots/`).
 
 ### Typography
-- **Heading:** Baloo 2
-- **Body:** Comic Neue
-- **Mood:** kids, education, playful, friendly, colorful, learning
-- **Best For:** Children's apps, educational games, kid-friendly content
-- **Google Fonts:** `https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&family=Comic+Neue:wght@300;400;700&display=swap`
+- **Heading (Mode Anak & Publik):** `Baloo 2` (500, 600, 700)
+- **Body & Surface Admin (`[data-surface="admin"]` / `[data-theme="remaja"]`):** `Plus Jakarta Sans` (400, 500, 600, 700)
+- **Google Fonts:** `https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap`
 
 ### Key Effects & Dual-Theme Adaptation (PRD `02` §9)
 - Inner+outer shadows (subtle, no hard lines), soft press (200ms ease-out), fluffy elements, smooth transitions.

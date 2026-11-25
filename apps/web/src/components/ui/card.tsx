@@ -1,12 +1,12 @@
 import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-/** Surface card container using OmprengQ paper/card tokens. */
+/** Plush 3D claymorphism surface card container mapped to OmprengQ semantic tokens. */
 export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "rounded-lg border border-border bg-card text-card-foreground shadow-[var(--shadow-card)]",
+        "rounded-lg border-2 border-[var(--clay-rim)] bg-card text-card-foreground shadow-[var(--shadow-clay-card)]",
         className,
       )}
       {...props}
@@ -16,12 +16,12 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
 
 /** Card header wrapper. */
 export function CardHeader({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("flex flex-col gap-1.5 p-6", className)} {...props} />;
+  return <div className={cn("flex flex-col gap-1 p-5 sm:p-6", className)} {...props} />;
 }
 
 /** Card heading element. */
 export function CardTitle({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) {
-  return <h3 className={cn("text-xl font-bold leading-tight", className)} {...props} />;
+  return <h3 className={cn("text-lg font-bold leading-snug sm:text-xl", className)} {...props} />;
 }
 
 /** Card subtitle/description text. */
@@ -31,5 +31,5 @@ export function CardDescription({ className, ...props }: HTMLAttributes<HTMLPara
 
 /** Card main body wrapper. */
 export function CardContent({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("px-6 pb-6", className)} {...props} />;
+  return <div className={cn("px-5 pb-5 sm:px-6 sm:pb-6", className)} {...props} />;
 }

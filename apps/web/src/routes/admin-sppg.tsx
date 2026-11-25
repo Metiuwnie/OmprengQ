@@ -77,14 +77,9 @@ export function AdminSppgPage() {
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Kelola SPPG</h1>
-          <p className="text-sm text-muted-foreground">
-            Dapur Satuan Pelayanan Pemenuhan Gizi yang menaungi sekolah dan menu harian.
-          </p>
-        </div>
+    <div className="w-full space-y-6">
+      <div className="clay-card flex flex-wrap items-center justify-between gap-4 p-5 sm:p-6">
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Kelola SPPG</h1>
         <Button type="button" variant="primary" onClick={openCreate}>
           <Plus className="h-4 w-4" aria-hidden="true" />
           Tambah SPPG
@@ -155,7 +150,7 @@ export function AdminSppgPage() {
       {deleteMutation.isError && (
         <div
           role="alert"
-          className="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+          className="clay-card border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive"
         >
           {deleteMutation.error.message}
         </div>
@@ -164,14 +159,20 @@ export function AdminSppgPage() {
       {sppgQuery.isPending && (
         <div
           role="status"
-          className="rounded-lg border border-border bg-card px-4 py-10 text-center text-sm text-muted-foreground"
+          className="clay-card px-4 py-10 text-center text-sm text-muted-foreground"
         >
           Memuat daftar SPPG…
         </div>
       )}
 
-      {sppgQuery.isSuccess && (
-        <div className="grid gap-3 sm:grid-cols-2">
+      {sppgQuery.isSuccess && rows.length === 0 && (
+        <div className="clay-card border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
+          Belum ada unit SPPG terdaftar.
+        </div>
+      )}
+
+      {sppgQuery.isSuccess && rows.length > 0 && (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {rows.map((row) => (
             <Card key={row.id}>
               <CardHeader>
@@ -188,7 +189,7 @@ export function AdminSppgPage() {
                       type="button"
                       onClick={() => openEdit(row)}
                       aria-label={`Ubah ${row.name}`}
-                      className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background text-foreground hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+                      className="clay-pill inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md bg-card text-foreground hover:bg-sky-soft/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
                     >
                       <Pencil className="h-4 w-4" aria-hidden="true" />
                     </button>
@@ -197,7 +198,7 @@ export function AdminSppgPage() {
                       onClick={() => deleteMutation.mutate(row.id)}
                       disabled={deleteMutation.isPending}
                       aria-label={`Hapus ${row.name}`}
-                      className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background text-destructive hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+                      className="clay-pill inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md bg-card text-destructive hover:bg-coral-soft/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
                     >
                       <Trash2 className="h-4 w-4" aria-hidden="true" />
                     </button>

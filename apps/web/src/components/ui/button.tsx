@@ -8,16 +8,16 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-accent text-accent-foreground shadow-[0_4px_0_0_var(--color-accent-deep)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_1px_0_0_var(--color-accent-deep)]",
+          "bg-accent text-accent-foreground shadow-[var(--shadow-clay-accent)] hover:-translate-y-0.5 active:translate-y-0.5",
         primary:
-          "bg-primary text-primary-foreground shadow-sm hover:opacity-95 active:translate-y-0.5",
+          "bg-primary text-primary-foreground shadow-[var(--shadow-clay-primary)] hover:-translate-y-0.5 hover:opacity-95 active:translate-y-0.5",
         secondary:
-          "border border-border bg-card text-card-foreground shadow-[0_3px_0_0_var(--color-edge)] hover:-translate-y-0.5 active:translate-y-0.5",
-        ghost: "bg-transparent text-foreground hover:bg-secondary",
+          "border-2 border-[var(--clay-rim)] bg-card text-card-foreground shadow-[var(--shadow-clay-pill)] hover:-translate-y-0.5 hover:bg-sky-soft/60 active:translate-y-0.5",
+        ghost: "bg-transparent text-foreground hover:bg-card/70 active:translate-y-0.5",
       },
       size: {
         default: "min-h-11 px-5 py-2.5 text-sm",
-        lg: "min-h-13 px-6 py-3 text-base",
+        lg: "min-h-12 px-6 py-3 text-base",
         sm: "min-h-11 px-4 py-2 text-sm",
       },
     },
@@ -32,7 +32,7 @@ export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {}
 
-/** Accessible button component mapped to OmprengQ semantic tokens (min 44px touch target). */
+/** Tactile 3D clay button mapped to OmprengQ semantic tokens (min 44px touch target). */
 export function Button({ className, variant, size, type = "button", ...props }: ButtonProps) {
   return (
     <button

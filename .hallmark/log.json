@@ -1,5 +1,60 @@
 [
  {
+  "shape": "app screen",
+  "theme": "hum",
+  "axes": "light/rounded-sans/clay-sky-leaf",
+  "hero": "Settled",
+  "nav": "floating-clay-bar",
+  "footer": "mast",
+  "imagery": "3d-clay-mascots",
+  "photos": [
+   "mascot-sayur.png",
+   "mascot-ayam.png"
+  ],
+  "entry": "apps/web/src/styles/tokens.css",
+  "fingerprint": "omprengq-claymorphism-mascots",
+  "sections": [
+   "Home",
+   "AdminLogin",
+   "DashboardShell",
+   "AdminPages",
+   "PublicMenu"
+  ],
+  "signature": "Pastel sky 3D claymorphism with Sayur and Ayam clay mascots across public and admin views",
+  "waived": [],
+  "prompt": "True 3D Claymorphism redesign with 2 mascots",
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "date": "2026-11-25"
+ },
+ {
+  "shape": "app screen",
+  "theme": "hum",
+  "axes": "light/rounded-sans/botanical-emerald",
+  "hero": "Settled",
+  "nav": "sidebar-and-topbar",
+  "footer": "mast",
+  "imagery": "the product",
+  "photos": [],
+  "entry": "apps/web/src/styles/tokens.css",
+  "fingerprint": "omprengq-hallmark-full-redesign",
+  "sections": [
+   "Home",
+   "AdminLogin",
+   "DashboardShell",
+   "AdminPages",
+   "PublicMenu"
+  ],
+  "signature": "Botanical-emerald split login, streamlined header hierarchy without verbose subtitles, and unified Anak/Remaja token surface",
+  "waived": [],
+  "prompt": "Hallmark full redesign across OmprengQ web pages and login",
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "date": "2026-11-25"
+ },
+ {
   "shape": "Workbench",
   "theme": "hum",
   "axes": "light/rounded-sans/chromatic-yellow",

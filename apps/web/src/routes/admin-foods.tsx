@@ -135,18 +135,51 @@ export function AdminFoodsPage() {
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="space-y-1">
+    <div className="w-full space-y-6">
+      <div className="clay-card p-5 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Bahan Pangan TKPI</h1>
-          <p className="text-sm text-muted-foreground">
-            Cari referensi TKPI per 100 g BDD atau tambahkan bahan custom khusus dapur SPPG.
-          </p>
+          <Button type="button" variant="primary" onClick={openCreate}>
+            <Plus className="h-4 w-4" aria-hidden="true" />
+            Tambah Bahan Custom
+          </Button>
         </div>
-        <Button type="button" variant="primary" onClick={openCreate}>
-          <Plus className="h-4 w-4" aria-hidden="true" />
-          Tambah Bahan Custom
-        </Button>
+
+        <div className="mt-4 flex flex-wrap items-end gap-3 border-t border-border/70 pt-4">
+          <div className="min-w-0 flex-1 space-y-1.5">
+            <Label htmlFor="foods-search">Cari nama atau kode bahan</Label>
+            <div className="relative">
+              <Search
+                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <Input
+                id="foods-search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Ketik nama bahan atau kode TKPI…"
+                className="pl-9"
+              />
+            </div>
+          </div>
+
+          <div className="w-full space-y-1.5 sm:w-56">
+            <Label htmlFor="foods-cat-filter">Filter kategori</Label>
+            <select
+              id="foods-cat-filter"
+              value={categoryFilter}
+              onChange={(event) => setCategoryFilter(event.target.value as FoodCategory | "")}
+              className="min-h-11 w-full rounded-[var(--radius-input)] border border-border bg-background px-3 text-sm text-foreground shadow-[var(--shadow-clay-inset)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:border-primary/70 disabled:opacity-50"
+            >
+              <option value="">Semua kategori</option>
+              {FOOD_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {FOOD_CATEGORY_LABELS[cat]}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
       {formMode !== "closed" && (
@@ -207,7 +240,7 @@ export function AdminFoodsPage() {
                   id="food-cat"
                   value={category}
                   onChange={(event) => setCategory(event.target.value as FoodCategory)}
-                  className="min-h-11 w-full rounded-[var(--radius-input)] border border-border bg-card px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:border-primary/70 disabled:opacity-50"
+                  className="min-h-11 w-full rounded-[var(--radius-input)] border border-border bg-card px-3 text-sm text-foreground shadow-[var(--shadow-clay-inset)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:border-primary/70 disabled:opacity-50"
                 >
                   {FOOD_CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
@@ -285,46 +318,10 @@ export function AdminFoodsPage() {
         </Card>
       )}
 
-      <div className="flex flex-wrap items-end gap-3 border-b border-border pb-4">
-        <div className="min-w-0 flex-1 space-y-1.5">
-          <Label htmlFor="foods-search">Cari nama atau kode bahan</Label>
-          <div className="relative">
-            <Search
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-              aria-hidden="true"
-            />
-            <Input
-              id="foods-search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Ketik nama bahan atau kode TKPI…"
-              className="pl-9"
-            />
-          </div>
-        </div>
-
-        <div className="w-full space-y-1.5 sm:w-56">
-          <Label htmlFor="foods-cat-filter">Filter kategori</Label>
-          <select
-            id="foods-cat-filter"
-            value={categoryFilter}
-            onChange={(event) => setCategoryFilter(event.target.value as FoodCategory | "")}
-            className="min-h-11 w-full rounded-[var(--radius-input)] border border-border bg-card px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:border-primary/70 disabled:opacity-50"
-          >
-            <option value="">Semua kategori</option>
-            {FOOD_CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {FOOD_CATEGORY_LABELS[cat]}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
       {foodsQuery.isPending && (
         <div
           role="status"
-          className="rounded-lg border border-border bg-card px-4 py-10 text-center text-sm text-muted-foreground"
+          className="clay-card px-4 py-10 text-center text-sm text-muted-foreground"
         >
           Memuat bahan pangan…
         </div>
@@ -333,23 +330,23 @@ export function AdminFoodsPage() {
       {foodsQuery.isError && (
         <div
           role="alert"
-          className="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-4 text-sm text-destructive"
+          className="clay-card border-destructive/40 bg-destructive/10 px-4 py-4 text-sm text-destructive"
         >
           {foodsQuery.error.message}
         </div>
       )}
 
       {foodsQuery.isSuccess && foodRows.length === 0 && (
-        <div className="rounded-lg border border-dashed border-border bg-card px-4 py-10 text-center text-sm text-muted-foreground">
+        <div className="clay-card border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
           Tidak ada bahan yang cocok dengan pencarian Anda.
         </div>
       )}
 
       {foodsQuery.isSuccess && foodRows.length > 0 && (
         <>
-          <div className="hidden overflow-x-auto rounded-lg border border-border bg-card md:block">
+          <div className="clay-card hidden overflow-x-auto overflow-hidden md:block">
             <table className="w-full border-collapse text-left text-sm">
-              <thead className="border-b border-border bg-secondary/60 text-xs font-semibold text-muted-foreground">
+              <thead className="border-b border-border bg-sky-soft/70 text-xs font-semibold text-foreground/80">
                 <tr>
                   <th className="px-4 py-3">Bahan (per 100 g)</th>
                   <th className="px-4 py-3">Kategori</th>
@@ -364,7 +361,7 @@ export function AdminFoodsPage() {
               </thead>
               <tbody className="divide-y divide-border">
                 {foodRows.map((food) => (
-                  <tr key={food.id}>
+                  <tr key={food.id} className="transition-colors hover:bg-sky-soft/25">
                     <td className="px-4 py-3">
                       <p className="font-semibold text-foreground">{food.name}</p>
                       <div className="mt-0.5 flex flex-wrap items-center gap-1.5">
@@ -404,7 +401,7 @@ export function AdminFoodsPage() {
                             type="button"
                             onClick={() => openEdit(food)}
                             aria-label={`Ubah ${food.name}`}
-                            className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background text-foreground hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+                            className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background text-foreground shadow-2xs hover:bg-sky-soft/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
                           >
                             <Pencil className="h-4 w-4" aria-hidden="true" />
                           </button>
@@ -413,7 +410,7 @@ export function AdminFoodsPage() {
                             onClick={() => deleteMutation.mutate(food.id)}
                             disabled={deleteMutation.isPending}
                             aria-label={`Hapus ${food.name}`}
-                            className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background text-destructive hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+                            className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background text-destructive shadow-2xs hover:bg-coral-soft/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
                           >
                             <Trash2 className="h-4 w-4" aria-hidden="true" />
                           </button>
@@ -430,7 +427,7 @@ export function AdminFoodsPage() {
 
           <div className="space-y-2.5 md:hidden">
             {foodRows.map((food) => (
-              <div key={food.id} className="space-y-2 rounded-lg border border-border bg-card p-4">
+              <div key={food.id} className="clay-card space-y-2 p-4">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <p className="font-semibold text-foreground">{food.name}</p>

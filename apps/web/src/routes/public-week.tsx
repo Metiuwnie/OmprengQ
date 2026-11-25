@@ -30,10 +30,10 @@ export function PublicWeekPage() {
 
   if (weekQuery.isPending) {
     return (
-      <div className="min-h-screen bg-background px-4 py-10 text-foreground sm:px-6">
-        <div className="mx-auto max-w-4xl space-y-4" role="status">
-          <div className="h-12 motion-safe:animate-pulse rounded-lg bg-secondary" />
-          <div className="h-32 motion-safe:animate-pulse rounded-lg bg-secondary" />
+      <div className="min-h-screen bg-background px-4 py-10 text-foreground sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl space-y-4" role="status">
+          <div className="clay-card h-14 motion-safe:animate-pulse" />
+          <div className="clay-card h-32 motion-safe:animate-pulse" />
           <p className="text-center text-sm text-muted-foreground">Memuat jadwal mingguan…</p>
         </div>
       </div>
@@ -61,7 +61,7 @@ export function PublicWeekPage() {
               )}
               <Link
                 to="/"
-                className="inline-flex min-h-11 items-center rounded-md border border-border bg-secondary px-4 text-sm font-semibold text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5"
+                className="clay-pill inline-flex min-h-11 items-center rounded-md bg-card px-4 text-sm font-semibold text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
               >
                 Ke Beranda
               </Link>
@@ -87,12 +87,12 @@ export function PublicWeekPage() {
       data-theme={getDefaultDisplayMode(activeLevel)}
       className="min-h-screen bg-background text-foreground"
     >
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
+      <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 sm:pt-5 lg:px-8">
+        <header className="clay-card flex flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-5">
           <div className="min-w-0">
             <Link
               to={`/s/${data.school.slug}/hari-ini`}
-              className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5"
+              className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
             >
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
               Kembali ke Menu Hari Ini
@@ -103,13 +103,13 @@ export function PublicWeekPage() {
           </div>
 
           {allowedLevels.length > 1 && (
-            <div role="group" aria-label="Pilih jenjang" className="flex flex-wrap gap-1.5">
+            <div role="group" aria-label="Pilih jenjang" className="clay-well flex flex-wrap gap-1 p-1">
               {allowedLevels.map((lvl) => (
                 <Button
                   key={lvl}
                   type="button"
                   size="sm"
-                  variant={lvl === activeLevel ? "primary" : "secondary"}
+                  variant={lvl === activeLevel ? "primary" : "ghost"}
                   onClick={() => {
                     setSelectedLevel(lvl);
                     writeStoredLevel(lvl);
@@ -120,11 +120,11 @@ export function PublicWeekPage() {
               ))}
             </div>
           )}
-        </div>
-      </header>
+        </header>
+      </div>
 
-      <main className="mx-auto max-w-4xl space-y-5 px-4 py-6 sm:px-6">
-        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border bg-card p-3">
+      <main className="mx-auto max-w-7xl space-y-5 px-4 py-6 sm:px-6 lg:px-8">
+        <div className="clay-card flex flex-wrap items-center justify-between gap-2 p-3">
           <div className="flex flex-wrap items-center gap-2">
             <Button
               type="button"
@@ -148,12 +148,12 @@ export function PublicWeekPage() {
               <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </Button>
           </div>
-          <p className="text-sm font-semibold text-foreground">
+          <p className="px-2 text-sm font-semibold text-foreground">
             {formatDateId(data.start)} s.d. {formatDateId(data.end)}
           </p>
         </div>
 
-        <div className="space-y-3">
+        <div className="grid gap-4 md:grid-cols-2">
           {weekDates.map((iso) => {
             const menu = menusByDate.get(iso);
             const portion = menu?.portions[activeLevel];
@@ -162,8 +162,8 @@ export function PublicWeekPage() {
             return (
               <div
                 key={iso}
-                className={`rounded-lg border bg-card p-4 ${
-                  isToday ? "border-primary" : "border-border"
+                className={`clay-card p-4 sm:p-5 ${
+                  isToday ? "bg-gradient-to-r from-card to-mint-soft/70 ring-2 ring-primary/35" : ""
                 }`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">

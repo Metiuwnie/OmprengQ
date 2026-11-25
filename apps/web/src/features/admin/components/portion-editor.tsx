@@ -278,7 +278,7 @@ export function PortionEditor({
                   id="copy-level-select"
                   value={copySource}
                   onChange={(event) => setCopySource(event.target.value as Level | "")}
-                  className="min-h-11 rounded-[var(--radius-input)] border border-border bg-card px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:border-primary/70 disabled:opacity-50"
+                  className="min-h-11 rounded-[var(--radius-input)] border border-border bg-card px-3 text-sm text-foreground shadow-[var(--shadow-clay-inset)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:border-primary/70 disabled:opacity-50"
                 >
                   <option value="">Pilih sumber…</option>
                   {copyCandidates.map((lvl) => (

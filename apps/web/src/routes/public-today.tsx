@@ -5,8 +5,6 @@ import {
   CalendarDays,
   Maximize2,
   RefreshCw,
-  Sparkles,
-  Utensils,
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
@@ -37,13 +35,13 @@ export function PublicTodayPage() {
 
   if (todayQuery.isPending) {
     return (
-      <div className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6">
-        <div className="mx-auto max-w-4xl space-y-6" role="status" aria-live="polite">
-          <div className="h-14 motion-safe:animate-pulse rounded-lg bg-secondary" />
-          <div className="h-44 motion-safe:animate-pulse rounded-lg bg-secondary" />
+      <div className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl space-y-6" role="status" aria-live="polite">
+          <div className="clay-card h-16 motion-safe:animate-pulse" />
+          <div className="clay-card h-48 motion-safe:animate-pulse" />
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="h-28 motion-safe:animate-pulse rounded-lg bg-secondary" />
-            <div className="h-28 motion-safe:animate-pulse rounded-lg bg-secondary" />
+            <div className="clay-card h-28 motion-safe:animate-pulse" />
+            <div className="clay-card h-28 motion-safe:animate-pulse" />
           </div>
           <p className="text-center text-sm text-muted-foreground">Memuat menu sekolah hari ini…</p>
         </div>
@@ -76,7 +74,7 @@ export function PublicTodayPage() {
               )}
               <Link
                 to="/"
-                className="inline-flex min-h-11 items-center rounded-md border border-border bg-secondary px-4 text-sm font-semibold text-foreground hover:bg-secondary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+                className="clay-pill inline-flex min-h-11 items-center rounded-md bg-card px-4 text-sm font-semibold text-foreground hover:bg-sky-soft/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
               >
                 Ke Beranda OmprengQ
               </Link>
@@ -121,26 +119,21 @@ export function PublicTodayPage() {
 
   return (
     <div data-theme={displayMode} className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
-          <div className="flex min-w-0 items-center gap-3">
-            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-accent text-accent-foreground">
-              <Utensils className="h-5 w-5" aria-hidden="true" />
-            </span>
-            <div className="min-w-0">
-              <p className="truncate font-display text-xl font-bold leading-tight text-foreground">
-                {data.school.name}
-              </p>
-              <p className="truncate text-sm text-muted-foreground">{dateLabel}</p>
-            </div>
+      <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 sm:pt-5 lg:px-8">
+        <header className="clay-card flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5">
+          <div className="min-w-0">
+            <p className="truncate font-display text-xl font-bold leading-tight text-foreground">
+              {data.school.name}
+            </p>
+            <p className="truncate text-sm text-muted-foreground">{dateLabel}</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <Link
               to={`/s/${data.school.slug}/minggu`}
-              className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border bg-secondary px-3.5 text-sm font-semibold text-foreground hover:bg-secondary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5"
+              className="clay-pill inline-flex min-h-11 items-center gap-2 rounded-md bg-card px-3.5 text-sm font-semibold text-foreground transition-[transform,background-color] duration-150 hover:-translate-y-0.5 hover:bg-sky-soft/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
             >
-              <CalendarDays className="h-4 w-4" aria-hidden="true" />
+              <CalendarDays className="h-4 w-4 text-primary" aria-hidden="true" />
               Jadwal Minggu
             </Link>
             {data.menu && (
@@ -150,37 +143,45 @@ export function PublicTodayPage() {
                 size="sm"
                 onClick={() => setSearchParams({ mode: "kelas" })}
               >
-                <Maximize2 className="h-4 w-4" aria-hidden="true" />
+                <Maximize2 className="h-4 w-4 text-primary" aria-hidden="true" />
                 Tampilkan ke kelas
               </Button>
             )}
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
-      <main className="mx-auto max-w-4xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          {allowedLevels.length > 1 && (
-            <div role="group" aria-label="Pilih jenjang" className="flex flex-wrap gap-1.5">
+      <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+        <div className="clay-card flex flex-wrap items-center justify-between gap-3 p-2.5">
+          {allowedLevels.length > 1 ? (
+            <div role="group" aria-label="Pilih jenjang" className="clay-well flex flex-wrap gap-1 p-1">
               {allowedLevels.map((lvl) => (
                 <Button
                   key={lvl}
                   type="button"
                   size="sm"
-                  variant={lvl === activeLevel ? "primary" : "secondary"}
+                  variant={lvl === activeLevel ? "primary" : "ghost"}
                   onClick={() => handleSelectLevel(lvl)}
                 >
                   {LEVEL_SHORT_LABELS[lvl]}
                 </Button>
               ))}
             </div>
+          ) : (
+            <span className="px-3 text-xs font-semibold text-muted-foreground">
+              {LEVEL_LABELS[activeLevel]}
+            </span>
           )}
 
-          <div role="group" aria-label="Tampilan usia" className="flex items-center gap-1.5">
+          <div
+            role="group"
+            aria-label="Tampilan usia"
+            className="clay-well flex items-center gap-1 p-1"
+          >
             <Button
               type="button"
               size="sm"
-              variant={displayMode === "anak" ? "default" : "secondary"}
+              variant={displayMode === "anak" ? "default" : "ghost"}
               onClick={() => setManualMode("anak")}
             >
               Mode Anak
@@ -188,7 +189,7 @@ export function PublicTodayPage() {
             <Button
               type="button"
               size="sm"
-              variant={displayMode === "remaja" ? "default" : "secondary"}
+              variant={displayMode === "remaja" ? "default" : "ghost"}
               onClick={() => setManualMode("remaja")}
             >
               Mode Remaja
@@ -197,18 +198,29 @@ export function PublicTodayPage() {
         </div>
 
         {!data.menu ? (
-          <Card>
+          <Card className="overflow-hidden bg-gradient-to-b from-card to-sky-soft/60">
             <CardHeader>
-              <Badge variant="default">Hari tanpa jadwal MBG</Badge>
-              <CardTitle className="pt-2 text-2xl">Belum ada menu untuk hari ini</CardTitle>
-              <CardDescription className="text-base">
-                Hari ini tidak ada menu MBG yang terjadwal (akhir pekan, hari libur, atau masih
-                disiapkan ahli gizi).
-              </CardDescription>
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="space-y-2">
+                  <Badge variant="default">Hari tanpa jadwal MBG</Badge>
+                  <CardTitle className="text-2xl">Belum ada menu untuk hari ini</CardTitle>
+                  <CardDescription className="max-w-lg text-base">
+                    Hari ini tidak ada menu MBG yang terjadwal (akhir pekan, hari libur, atau masih
+                    disiapkan ahli gizi).
+                  </CardDescription>
+                </div>
+                <img
+                  src="/mascots/mascot-sayur-tanya.png"
+                  alt="Maskot sayur bertanya saat belum ada menu"
+                  width={538}
+                  height={560}
+                  className="mascot-float h-28 w-auto object-contain"
+                />
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               {data.next ? (
-                <div className="rounded-md border border-border bg-background p-4">
+                <div className="clay-well p-4">
                   <p className="text-xs font-semibold text-primary">
                     Menu berikutnya: {formatDateId(data.next.date, true)}
                   </p>
@@ -221,7 +233,7 @@ export function PublicTodayPage() {
 
               <Link
                 to={`/s/${data.school.slug}/minggu`}
-                className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground hover:opacity-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5"
+                className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-clay-primary)] transition-[transform,opacity] duration-150 hover:-translate-y-0.5 hover:opacity-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
               >
                 <CalendarDays className="h-4 w-4" aria-hidden="true" />
                 Lihat jadwal mingguan
@@ -230,18 +242,32 @@ export function PublicTodayPage() {
           </Card>
         ) : (
           <>
-            <Card>
+            <Card className="overflow-hidden bg-gradient-to-br from-card via-card to-sun-soft/60">
               <CardHeader>
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <Badge variant="mint">Menu Hari Ini ({LEVEL_LABELS[activeLevel]})</Badge>
-                  <span className="text-xs text-muted-foreground">Perkiraan berdasarkan TKPI</span>
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge variant="mint">Menu Hari Ini ({LEVEL_LABELS[activeLevel]})</Badge>
+                      <span className="text-xs text-muted-foreground">Perkiraan berdasarkan TKPI</span>
+                    </div>
+                    <CardTitle className="text-2xl sm:text-3xl">{data.menu.name}</CardTitle>
+                    {data.menu.description && (
+                      <CardDescription className="max-w-prose text-base">
+                        {data.menu.description}
+                      </CardDescription>
+                    )}
+                  </div>
+
+                  {displayMode === "anak" && (
+                    <img
+                      src="/mascots/mascot-ayam-ompreng.png"
+                      alt="Maskot ayam membawa nampan makan siang bergizi"
+                      width={511}
+                      height={560}
+                      className="mascot-float hidden h-28 w-auto shrink-0 object-contain sm:block"
+                    />
+                  )}
                 </div>
-                <CardTitle className="pt-1 text-2xl sm:text-3xl">{data.menu.name}</CardTitle>
-                {data.menu.description && (
-                  <CardDescription className="max-w-prose text-base">
-                    {data.menu.description}
-                  </CardDescription>
-                )}
               </CardHeader>
 
               {data.menu.photoUrl && (
@@ -249,7 +275,7 @@ export function PublicTodayPage() {
                   <img
                     src={data.menu.photoUrl}
                     alt={`Foto menu ${data.menu.name}`}
-                    className="max-h-72 w-full rounded-md object-cover"
+                    className="max-h-72 w-full rounded-md object-cover shadow-xs"
                   />
                 </CardContent>
               )}
@@ -257,22 +283,22 @@ export function PublicTodayPage() {
 
             {activePortion ? (
               <>
-                <section aria-label="Sorotan gizi utama" className="grid grid-cols-3 gap-3">
-                  <div className="rounded-lg border border-border bg-card p-3.5 sm:p-4">
-                    <p className="text-xs text-muted-foreground sm:text-sm">Energi</p>
-                    <p className="mt-1 font-mono text-lg font-bold text-foreground tabular-nums sm:text-2xl">
+                <section aria-label="Sorotan gizi utama" className="grid grid-cols-3 gap-3 sm:gap-4">
+                  <div className="clay-card bg-sun-soft p-3.5 sm:p-5">
+                    <p className="text-xs font-semibold text-muted-foreground sm:text-sm">Energi</p>
+                    <p className="mt-1 font-display text-xl font-bold text-foreground tabular-nums sm:text-2xl">
                       {Math.round(activePortion.totals.energyKcal)} kkal
                     </p>
                   </div>
-                  <div className="rounded-lg border border-border bg-card p-3.5 sm:p-4">
-                    <p className="text-xs text-muted-foreground sm:text-sm">Protein</p>
-                    <p className="mt-1 font-mono text-lg font-bold text-foreground tabular-nums sm:text-2xl">
+                  <div className="clay-card bg-coral-soft p-3.5 sm:p-5">
+                    <p className="text-xs font-semibold text-muted-foreground sm:text-sm">Protein</p>
+                    <p className="mt-1 font-display text-xl font-bold text-foreground tabular-nums sm:text-2xl">
                       {activePortion.totals.proteinG.toFixed(1)} g
                     </p>
                   </div>
-                  <div className="rounded-lg border border-border bg-card p-3.5 sm:p-4">
-                    <p className="text-xs text-muted-foreground sm:text-sm">Serat</p>
-                    <p className="mt-1 font-mono text-lg font-bold text-foreground tabular-nums sm:text-2xl">
+                  <div className="clay-card bg-mint-soft p-3.5 sm:p-5">
+                    <p className="text-xs font-semibold text-muted-foreground sm:text-sm">Serat</p>
+                    <p className="mt-1 font-display text-xl font-bold text-foreground tabular-nums sm:text-2xl">
                       {activePortion.totals.fiberG.toFixed(1)} g
                     </p>
                   </div>
@@ -281,10 +307,12 @@ export function PublicTodayPage() {
                 {activePortion.allergens.length > 0 && (
                   <div
                     role="note"
-                    className="flex items-start gap-3 rounded-lg border border-border bg-accent/30 px-4 py-3.5 text-sm text-foreground"
+                    className="clay-card flex items-start gap-3 bg-sun-soft/90 px-4 py-3.5 text-sm text-foreground"
                   >
-                    <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-foreground" aria-hidden="true" />
-                    <p>
+                    <span className="clay-pill inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-accent text-accent-foreground">
+                      <AlertTriangle className="h-4 w-4" aria-hidden="true" />
+                    </span>
+                    <p className="pt-1">
                       <span className="font-semibold">Info alergen:</span> Menu ini mengandung{" "}
                       {activePortion.allergens
                         .map((a: Allergen) => ALLERGEN_LABELS[a].toLowerCase())
@@ -295,15 +323,15 @@ export function PublicTodayPage() {
                 )}
 
                 {displayMode === "anak" ? (
-                  <section aria-label="Isi piring hari ini" className="space-y-3">
+                  <section aria-label="Isi piring hari ini" className="clay-card space-y-4 p-5 sm:p-6">
                     <h2 className="text-xl font-bold text-foreground">Isi Piringku Hari Ini</h2>
-                    <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
                       {activePortion.items.map((item, idx) => (
                         <div
                           key={`${item.label}-${idx}`}
-                          className="flex items-start gap-3.5 rounded-lg border border-border bg-card p-4"
+                          className="clay-well flex items-start gap-3.5 p-4"
                         >
-                          <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-accent text-accent-foreground">
+                          <span className="clay-pill inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-accent text-accent-foreground">
                             <CategoryIcon category={item.category} className="h-6 w-6" />
                           </span>
                           <div className="min-w-0 space-y-1">
@@ -320,7 +348,10 @@ export function PublicTodayPage() {
                     </div>
                   </section>
                 ) : (
-                  <section aria-label="Rincian menu remaja" className="space-y-4">
+                  <section
+                    aria-label="Rincian menu remaja"
+                    className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]"
+                  >
                     <Card>
                       <CardHeader>
                         <CardTitle className="text-lg">Komposisi Menu &amp; Manfaat</CardTitle>
@@ -333,7 +364,7 @@ export function PublicTodayPage() {
                               className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm"
                             >
                               <div className="flex min-w-0 items-center gap-3">
-                                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-secondary text-primary">
+                                <span className="clay-pill inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-mint-soft text-primary">
                                   <CategoryIcon category={item.category} className="h-4 w-4" />
                                 </span>
                                 <div className="min-w-0">
@@ -424,27 +455,42 @@ export function PublicTodayPage() {
             )}
 
             {data.menu.funFact && (
-              <div className="flex items-start gap-3 rounded-lg border border-border bg-mint/30 p-4">
-                <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+              <div className="clay-card flex items-center justify-between gap-4 bg-mint-soft p-4 sm:p-5">
                 <div className="space-y-0.5 text-sm sm:text-base">
                   <p className="font-bold text-foreground">Tahukah kamu?</p>
                   <p className="text-foreground/90">{data.menu.funFact}</p>
                 </div>
+                <img
+                  src="/mascots/mascot-sayur-tanya.png"
+                  alt="Maskot sayur bertanya fakta seru gizi"
+                  width={538}
+                  height={560}
+                  className="mascot-float hidden h-20 w-auto shrink-0 object-contain sm:block"
+                />
               </div>
             )}
 
-            <div className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-card p-5">
-              <div className="space-y-1">
-                <p className="font-display text-lg font-bold text-foreground">
-                  Penasaran sisa kebutuhan gizi harianmu di rumah?
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Hitung secara privat di perangkatmu tanpa perlu membuat akun.
-                </p>
+            <div className="clay-elevated flex flex-wrap items-center justify-between gap-4 bg-gradient-to-r from-card via-card to-sun-soft/80 p-5 sm:p-6">
+              <div className="flex items-center gap-4">
+                <img
+                  src="/mascots/mascot-ayam.png"
+                  alt="Maskot ayam melambaikan tangan mengajak hitung gizi"
+                  width={511}
+                  height={560}
+                  className="mascot-float hidden h-20 w-auto shrink-0 object-contain sm:block"
+                />
+                <div className="space-y-1">
+                  <p className="font-display text-lg font-bold text-foreground">
+                    Penasaran sisa kebutuhan gizi harianmu di rumah?
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Hitung secara privat di perangkatmu tanpa perlu membuat akun.
+                  </p>
+                </div>
               </div>
               <Link
                 to={`/kalkulator?school=${encodeURIComponent(data.school.slug)}`}
-                className="inline-flex min-h-11 items-center gap-2 rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-[0_4px_0_0_var(--color-accent-deep)] hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5"
+                className="inline-flex min-h-12 items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-clay-primary)] transition-[transform,opacity] duration-150 hover:-translate-y-0.5 hover:opacity-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
               >
                 <Calculator className="h-4 w-4" aria-hidden="true" />
                 Hitung kebutuhan gizimu

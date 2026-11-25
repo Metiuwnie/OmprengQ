@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -70,7 +70,7 @@ export function AdminMenuEditorPage() {
     return (
       <div
         role="status"
-        className="mx-auto max-w-6xl rounded-lg border border-border bg-card px-4 py-12 text-center text-sm text-muted-foreground"
+        className="clay-card w-full px-4 py-12 text-center text-sm text-muted-foreground"
       >
         Memuat rincian menu…
       </div>
@@ -79,17 +79,17 @@ export function AdminMenuEditorPage() {
 
   if (detailQuery.isError || !detailQuery.data) {
     return (
-      <div className="mx-auto max-w-4xl space-y-4">
+      <div className="w-full space-y-4">
         <Link
           to="/admin/menus"
-          className="inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm font-medium text-foreground hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5"
+          className="clay-pill inline-flex min-h-11 items-center gap-2 rounded-md bg-card px-4 text-sm font-semibold text-foreground hover:bg-sky-soft/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Kembali ke Daftar Menu
         </Link>
         <div
           role="alert"
-          className="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-4 text-sm text-destructive"
+          className="clay-card border-destructive/40 bg-destructive/10 px-4 py-4 text-sm text-destructive"
         >
           {detailQuery.error?.message ?? "Menu tidak ditemukan."}
         </div>
@@ -134,53 +134,55 @@ export function AdminMenuEditorPage() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <Link
-          to="/admin/menus"
-          className="inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm font-medium text-foreground hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5"
-        >
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Kembali ke Kalender Menu
-        </Link>
+    <div className="w-full space-y-6">
+      <div className="clay-card space-y-4 p-5 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <Link
+            to="/admin/menus"
+            className="clay-pill inline-flex min-h-11 items-center gap-2 rounded-md bg-card px-3.5 text-sm font-semibold text-foreground hover:bg-sky-soft/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            Kembali ke Kalender Menu
+          </Link>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge variant={menu.status === "published" ? "mint" : "accent"}>
-            {menu.status === "published" ? "Terbit" : "Draf"}
-          </Badge>
-          {menu.status === "draft" && (
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant={menu.status === "published" ? "mint" : "accent"}>
+              {menu.status === "published" ? "Terbit" : "Draf"}
+            </Badge>
+            {menu.status === "draft" && (
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                disabled={publishMutation.isPending || totalSavedItems === 0}
+                onClick={handlePublish}
+              >
+                <Send className="h-4 w-4" aria-hidden="true" />
+                {publishMutation.isPending ? "Mempublikasikan…" : "Publikasikan"}
+              </Button>
+            )}
             <Button
               type="button"
-              variant="primary"
+              variant="secondary"
               size="sm"
-              disabled={publishMutation.isPending || totalSavedItems === 0}
-              onClick={handlePublish}
+              disabled={deleteMutation.isPending}
+              onClick={handleDelete}
             >
-              <Send className="h-4 w-4" aria-hidden="true" />
-              {publishMutation.isPending ? "Mempublikasikan…" : "Publikasikan"}
+              <Trash2 className="h-4 w-4 text-destructive" aria-hidden="true" />
+              {confirmDelete ? "Klik lagi untuk Hapus" : "Hapus"}
             </Button>
-          )}
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            disabled={deleteMutation.isPending}
-            onClick={handleDelete}
-          >
-            <Trash2 className="h-4 w-4 text-destructive" aria-hidden="true" />
-            {confirmDelete ? "Klik lagi untuk Hapus" : "Hapus"}
-          </Button>
-          {confirmDelete && (
-            <Button type="button" variant="ghost" size="sm" onClick={() => setConfirmDelete(false)}>
-              Batal
-            </Button>
-          )}
+            {confirmDelete && (
+              <Button type="button" variant="ghost" size="sm" onClick={() => setConfirmDelete(false)}>
+                Batal
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className="space-y-1">
-        <p className="text-sm font-medium text-muted-foreground">{formatDateId(menu.date, true)}</p>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{menu.name}</h1>
+        <div className="space-y-1 border-t border-border/70 pt-4">
+          <p className="text-sm font-medium text-muted-foreground">{formatDateId(menu.date, true)}</p>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{menu.name}</h1>
+        </div>
       </div>
 
       {actionFeedback && (
@@ -205,14 +207,11 @@ export function AdminMenuEditorPage() {
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div className="min-w-0 space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Informasi Menu</CardTitle>
-              <CardDescription>
-                Nama, deskripsi, dan edukasi mikro yang tampil kepada guru, siswa, dan orang tua.
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit(handleSaveMeta)} className="grid gap-4 sm:grid-cols-2">
@@ -286,9 +285,6 @@ export function AdminMenuEditorPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Salin Menu ke Tanggal Lain</CardTitle>
-              <CardDescription>
-                Duplikasi seluruh komposisi bahan per jenjang ke tanggal target sebagai draf baru.
-              </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-wrap items-end gap-3">
               <div className="space-y-1.5">

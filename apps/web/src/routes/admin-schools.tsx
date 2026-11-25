@@ -162,51 +162,53 @@ export function AdminSchoolsPage() {
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <div className="no-print flex flex-wrap items-start justify-between gap-4">
-        <div className="space-y-1">
+    <div className="w-full space-y-6">
+      <div className="no-print clay-card p-5 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Sekolah &amp; QR Cetak</h1>
-          <p className="text-sm text-muted-foreground">
-            Kelola daftar sekolah binaan SPPG beserta QR statis menuju halaman menu harian sekolah.
-          </p>
+          {canManage && (
+            <Button
+              type="button"
+              variant="primary"
+              disabled={isSuperAdmin && !activeSppgId}
+              onClick={openCreate}
+            >
+              <Plus className="h-4 w-4" aria-hidden="true" />
+              Tambah Sekolah
+            </Button>
+          )}
         </div>
-        {canManage && (
-          <Button
-            type="button"
-            variant="primary"
-            disabled={isSuperAdmin && !activeSppgId}
-            onClick={openCreate}
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Tambah Sekolah
-          </Button>
+
+        {isSuperAdmin && (
+          <div className="mt-4 flex flex-wrap items-end justify-between gap-3 border-t border-border/70 pt-4">
+            <div className="w-full max-w-sm space-y-1.5">
+              <Label htmlFor="schools-sppg-filter">SPPG</Label>
+              <select
+                id="schools-sppg-filter"
+                value={activeSppgId}
+                onChange={(event) => {
+                  setSelectedSppgId(event.target.value);
+                  setFormMode("closed");
+                  setQrSchool(null);
+                }}
+                className="min-h-11 w-full rounded-[var(--radius-input)] border border-border bg-background px-3 text-sm text-foreground shadow-[var(--shadow-clay-inset)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:border-primary/70 disabled:opacity-50"
+              >
+                {(sppgOptions ?? []).length === 0 && <option value="">Memuat SPPG…</option>}
+                {(sppgOptions ?? []).map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {schoolsQuery.isSuccess && (
+              <Badge variant="mint" className="tabular-nums">
+                {schoolRows.length} sekolah
+              </Badge>
+            )}
+          </div>
         )}
       </div>
-
-      {isSuperAdmin && (
-        <div className="no-print flex flex-wrap items-end gap-3 border-b border-border pb-4">
-          <div className="w-full max-w-sm space-y-1.5">
-            <Label htmlFor="schools-sppg-filter">SPPG</Label>
-            <select
-              id="schools-sppg-filter"
-              value={activeSppgId}
-              onChange={(event) => {
-                setSelectedSppgId(event.target.value);
-                setFormMode("closed");
-                setQrSchool(null);
-              }}
-              className="min-h-11 w-full rounded-[var(--radius-input)] border border-border bg-card px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:border-primary/70 disabled:opacity-50"
-            >
-              {(sppgOptions ?? []).length === 0 && <option value="">Memuat SPPG…</option>}
-              {(sppgOptions ?? []).map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      )}
 
       {formMode !== "closed" && (
         <Card className="no-print">
@@ -269,7 +271,7 @@ export function AdminSchoolsPage() {
                   id="school-tz"
                   value={timezone}
                   onChange={(event) => setTimezone(event.target.value as SchoolTimezone)}
-                  className="min-h-11 w-full rounded-[var(--radius-input)] border border-border bg-card px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:border-primary/70 disabled:opacity-50"
+                  className="min-h-11 w-full rounded-[var(--radius-input)] border border-border bg-card px-3 text-sm text-foreground shadow-[var(--shadow-clay-inset)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:border-primary/70 disabled:opacity-50"
                 >
                   {SCHOOL_TIMEZONES.map((tz) => (
                     <option key={tz} value={tz}>
@@ -360,7 +362,7 @@ export function AdminSchoolsPage() {
               <p className="text-base font-medium text-foreground">
                 Pindai untuk menu &amp; gizi hari ini
               </p>
-              <p className="font-mono text-xs text-muted-foreground">/s/{qrSchool.slug}/hari-ini</p>
+              <p className="text-xs text-muted-foreground">/s/{qrSchool.slug}/hari-ini</p>
             </div>
 
             {qrFeedback && <p className="no-print text-sm text-destructive">{qrFeedback}</p>}
@@ -387,7 +389,7 @@ export function AdminSchoolsPage() {
         {schoolsQuery.isPending && (
           <div
             role="status"
-            className="rounded-lg border border-border bg-card px-4 py-10 text-center text-sm text-muted-foreground"
+            className="clay-card px-4 py-10 text-center text-sm text-muted-foreground"
           >
             Memuat daftar sekolah…
           </div>
@@ -396,23 +398,23 @@ export function AdminSchoolsPage() {
         {schoolsQuery.isError && (
           <div
             role="alert"
-            className="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-4 text-sm text-destructive"
+            className="clay-card border-destructive/40 bg-destructive/10 px-4 py-4 text-sm text-destructive"
           >
             {schoolsQuery.error.message}
           </div>
         )}
 
         {schoolsQuery.isSuccess && schoolRows.length === 0 && (
-          <div className="rounded-lg border border-dashed border-border bg-card px-4 py-10 text-center text-sm text-muted-foreground">
+          <div className="clay-card border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
             Belum ada sekolah terdaftar pada SPPG ini.
           </div>
         )}
 
         {schoolsQuery.isSuccess && schoolRows.length > 0 && (
           <>
-            <div className="hidden overflow-x-auto rounded-lg border border-border bg-card md:block">
+            <div className="clay-card hidden overflow-x-auto overflow-hidden md:block">
               <table className="w-full border-collapse text-left text-sm">
-                <thead className="border-b border-border bg-secondary/60 text-xs font-semibold text-muted-foreground">
+                <thead className="border-b border-border bg-sky-soft/70 text-xs font-semibold text-foreground/80">
                   <tr>
                     <th className="px-4 py-3">Sekolah</th>
                     <th className="px-4 py-3">Slug</th>
@@ -424,7 +426,7 @@ export function AdminSchoolsPage() {
                 </thead>
                 <tbody className="divide-y divide-border">
                   {schoolRows.map((school) => (
-                    <tr key={school.id}>
+                    <tr key={school.id} className="transition-colors hover:bg-sky-soft/25">
                       <td className="px-4 py-3 font-semibold text-foreground">{school.name}</td>
                       <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
                         {school.slug}
@@ -461,7 +463,7 @@ export function AdminSchoolsPage() {
                                 type="button"
                                 onClick={() => openEdit(school)}
                                 aria-label={`Ubah ${school.name}`}
-                                className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background text-foreground hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+                                className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background text-foreground shadow-2xs hover:bg-sky-soft/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
                               >
                                 <Pencil className="h-4 w-4" aria-hidden="true" />
                               </button>
@@ -470,7 +472,7 @@ export function AdminSchoolsPage() {
                                 onClick={() => deleteMutation.mutate(school.id)}
                                 disabled={deleteMutation.isPending}
                                 aria-label={`Hapus ${school.name}`}
-                                className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background text-destructive hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+                                className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md border border-border bg-background text-destructive shadow-2xs hover:bg-coral-soft/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
                               >
                                 <Trash2 className="h-4 w-4" aria-hidden="true" />
                               </button>
@@ -488,12 +490,12 @@ export function AdminSchoolsPage() {
               {schoolRows.map((school) => (
                 <div
                   key={school.id}
-                  className="space-y-3 rounded-lg border border-border bg-card p-4"
+                  className="clay-card space-y-3 p-4"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="font-semibold text-foreground">{school.name}</p>
-                      <p className="truncate font-mono text-xs text-muted-foreground">
+                      <p className="truncate text-xs text-muted-foreground">
                         /s/{school.slug}/hari-ini
                       </p>
                     </div>

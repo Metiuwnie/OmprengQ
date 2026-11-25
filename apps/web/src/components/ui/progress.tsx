@@ -7,7 +7,7 @@ export interface ProgressProps {
   className?: string;
 }
 
-/** Accessible nutrition fulfillment progress bar animated via transform: scaleX. */
+/** Accessible clay nutrition fulfillment progress bar animated via transform: scaleX. */
 export function Progress({ value, max = 100, label, className }: ProgressProps) {
   const safeMax = max > 0 ? max : 100;
   const ratio = Math.min(1, Math.max(0, value / safeMax));
@@ -22,10 +22,10 @@ export function Progress({ value, max = 100, label, className }: ProgressProps) 
         aria-valuemax={safeMax}
         aria-valuenow={Math.round(value)}
         aria-valuetext={`${percent}%`}
-        className="h-3.5 w-full overflow-hidden rounded-full border border-border bg-secondary"
+        className="h-4 w-full overflow-hidden rounded-full border border-border bg-sky-soft p-0.5 shadow-[var(--shadow-clay-inset)]"
       >
         <div
-          className="h-full w-full origin-left rounded-full bg-mint transition-transform duration-300"
+          className="h-full w-full origin-left rounded-full bg-primary shadow-xs transition-transform duration-300"
           style={{ transform: `scaleX(${ratio})` }}
         />
       </div>

@@ -10,27 +10,36 @@ export function CalculatorPlaceholderPage() {
 
   return (
     <div className="min-h-screen bg-background px-4 py-10 text-foreground sm:px-6">
-      <div className="mx-auto max-w-xl space-y-5">
+      <div className="mx-auto max-w-3xl space-y-5">
         <Link
           to={schoolSlug ? `/s/${encodeURIComponent(schoolSlug)}/hari-ini` : "/"}
-          className="inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm font-semibold text-foreground hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5"
+          className="clay-pill inline-flex min-h-11 items-center gap-2 rounded-md bg-card px-4 text-sm font-semibold text-foreground hover:bg-sky-soft/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Kembali
         </Link>
 
-        <Card>
+        <Card className="overflow-hidden bg-gradient-to-b from-card to-mint-soft/60">
           <CardHeader>
-            <div className="mb-1">
-              <Badge variant="accent">Segera hadir di M5</Badge>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="space-y-2">
+                <Badge variant="accent">Segera hadir</Badge>
+                <CardTitle className="flex items-center gap-2 text-2xl">
+                  <Calculator className="h-6 w-6 text-primary" aria-hidden="true" />
+                  Kalkulator Gizi Harian
+                </CardTitle>
+              </div>
+              <img
+                src="/mascots/mascot-sayur-tanya.png"
+                alt="Maskot sayur bertanya OmprengQ"
+                width={538}
+                height={560}
+                className="mascot-float h-24 w-auto object-contain"
+              />
             </div>
-            <CardTitle className="flex items-center gap-2 text-2xl">
-              <Calculator className="h-6 w-6 text-primary" aria-hidden="true" />
-              Kalkulator Sisa Kebutuhan Gizi
-            </CardTitle>
-            <CardDescription className="text-base">
-              Kalkulator gizi pribadi dan rekomendasi makanan rumah akan dibangun pada milestone M4
-              dan M5. Data profil anak tersimpan lokal di perangkat tanpa dikirim ke server.
+            <CardDescription className="pt-2 text-base">
+              Perhitungan sisa kebutuhan gizi dan saran menu rumah berjalan lokal di perangkat Anda
+              tanpa mengirim data ke server.
             </CardDescription>
           </CardHeader>
           {schoolSlug && (

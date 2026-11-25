@@ -8,7 +8,7 @@ import {
 import { AlertTriangle, Calculator } from "lucide-react";
 import { useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ALLERGEN_LABELS } from "../lib/labels";
 
 export interface NutritionPanelItem {
@@ -56,7 +56,7 @@ export function NutritionPanel({ levelLabel, items, isDirty }: NutritionPanelPro
 
   return (
     <Card className="lg:sticky lg:top-22">
-      <CardHeader>
+      <CardHeader className="pb-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <Badge variant={isDirty ? "accent" : "mint"}>
             {isDirty ? "Belum disimpan" : "Tersimpan"}
@@ -65,21 +65,25 @@ export function NutritionPanel({ levelLabel, items, isDirty }: NutritionPanelPro
             {items.length} bahan
           </span>
         </div>
-        <CardTitle className="flex items-center gap-2 text-lg">
+        <CardTitle className="flex items-center gap-2 pt-1 text-lg">
           <Calculator className="h-5 w-5 text-primary" aria-hidden="true" />
           Ringkasan Gizi: {levelLabel}
         </CardTitle>
-        <CardDescription>
-          Dihitung otomatis dari berat matang siap makan per 1 porsi.
-        </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-5">
+        <div className="rounded-md border border-border bg-secondary/60 px-4 py-3">
+          <p className="text-xs font-medium text-muted-foreground">Energi total per porsi</p>
+          <p className="mt-0.5 font-display text-2xl font-bold text-foreground tabular-nums">
+            {Math.round(totals.energyKcal)} kkal
+          </p>
+        </div>
+
         <dl className="divide-y divide-border rounded-md border border-border bg-background/60 px-3.5">
           {NUTRIENT_ROWS.map((row) => (
             <div key={row.key} className="flex items-center justify-between gap-3 py-2.5 text-sm">
               <dt className="text-muted-foreground">{row.label}</dt>
-              <dd className="font-mono font-semibold text-foreground tabular-nums">
+              <dd className="font-semibold text-foreground tabular-nums">
                 {totals[row.key].toFixed(row.decimals)} {row.unit}
               </dd>
             </div>
@@ -103,8 +107,7 @@ export function NutritionPanel({ levelLabel, items, isDirty }: NutritionPanelPro
         </div>
 
         <p className="rounded-md bg-secondary px-3 py-2 text-xs text-muted-foreground">
-          Perkiraan berdasarkan TKPI. Nilai akhir tetap divalidasi ulang di server saat porsi
-          disimpan.
+          Perkiraan berdasarkan TKPI.
         </p>
       </CardContent>
     </Card>

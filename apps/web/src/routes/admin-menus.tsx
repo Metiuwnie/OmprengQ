@@ -129,52 +129,48 @@ export function AdminMenusPage() {
   const todayIso = toIsoDate();
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="space-y-1">
+    <div className="w-full space-y-6">
+      <div className="clay-card p-5 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Menu Harian MBG</h1>
-          <p className="text-sm text-muted-foreground">
-            Jadwal satu menu per tanggal per SPPG. Klik tanggal untuk menyusun bahan dan melihat
-            perkiraan gizi TKPI.
-          </p>
+          {canCreate && (
+            <Button
+              type="button"
+              variant="primary"
+              disabled={isSuperAdmin && !activeSppgId}
+              onClick={() => openCreateForm(anchorDate)}
+            >
+              <Plus className="h-4 w-4" aria-hidden="true" />
+              Buat Menu
+            </Button>
+          )}
         </div>
-        {canCreate && (
-          <Button
-            type="button"
-            variant="primary"
-            disabled={isSuperAdmin && !activeSppgId}
-            onClick={() => openCreateForm(anchorDate)}
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Buat Menu
-          </Button>
+
+        {isSuperAdmin && (
+          <div className="mt-4 flex flex-wrap items-end gap-3 border-t border-border/70 pt-4">
+            <div className="w-full max-w-sm space-y-1.5">
+              <Label htmlFor="sppg-filter">SPPG yang dikelola</Label>
+              <select
+                id="sppg-filter"
+                value={activeSppgId}
+                onChange={(event) => {
+                  setSelectedSppgId(event.target.value);
+                  setCreateForDate(null);
+                }}
+                className="min-h-11 w-full rounded-[var(--radius-input)] border border-border bg-background px-3 text-sm text-foreground shadow-[var(--shadow-clay-inset)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:border-primary/70 disabled:opacity-50"
+              >
+                {(sppgOptions ?? []).length === 0 && <option value="">Memuat daftar SPPG…</option>}
+                {(sppgOptions ?? []).map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                    {item.region ? ` (${item.region})` : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         )}
       </div>
-
-      {isSuperAdmin && (
-        <div className="flex flex-wrap items-end gap-3 border-b border-border pb-4">
-          <div className="w-full max-w-sm space-y-1.5">
-            <Label htmlFor="sppg-filter">SPPG yang dikelola</Label>
-            <select
-              id="sppg-filter"
-              value={activeSppgId}
-              onChange={(event) => {
-                setSelectedSppgId(event.target.value);
-                setCreateForDate(null);
-              }}
-              className="min-h-11 w-full rounded-[var(--radius-input)] border border-border bg-card px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:border-primary/70 disabled:opacity-50"
-            >
-              {(sppgOptions ?? []).length === 0 && <option value="">Memuat daftar SPPG…</option>}
-              {(sppgOptions ?? []).map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                  {item.region ? ` (${item.region})` : ""}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      )}
 
       {createForDate && (
         <Card>
@@ -273,7 +269,7 @@ export function AdminMenusPage() {
         </Card>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-3 sm:p-4">
+      <div className="clay-card flex flex-wrap items-center justify-between gap-3 p-3.5 sm:p-4">
         <div className="flex flex-wrap items-center gap-2">
           <Button type="button" variant="secondary" size="sm" onClick={() => handleStep(-1)}>
             <ChevronLeft className="h-4 w-4" aria-hidden="true" />
@@ -317,7 +313,7 @@ export function AdminMenusPage() {
       {menusQuery.isPending && (
         <div
           role="status"
-          className="rounded-lg border border-border bg-card px-4 py-10 text-center text-sm text-muted-foreground"
+          className="clay-card px-4 py-10 text-center text-sm text-muted-foreground"
         >
           Memuat jadwal menu…
         </div>
@@ -326,22 +322,22 @@ export function AdminMenusPage() {
       {menusQuery.isError && (
         <div
           role="alert"
-          className="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-4 text-sm text-destructive"
+          className="clay-card border-destructive/40 bg-destructive/10 px-4 py-4 text-sm text-destructive"
         >
           {menusQuery.error.message}
         </div>
       )}
 
       {menusQuery.isSuccess && viewMode === "week" && (
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {weekDates.map((iso) => {
             const menu = menusByDate.get(iso);
             const isToday = iso === todayIso;
             return (
               <div
                 key={iso}
-                className={`flex flex-col justify-between gap-3 rounded-lg border bg-card p-4 ${
-                  isToday ? "border-primary" : "border-border"
+                className={`clay-card flex flex-col justify-between gap-3 p-4 ${
+                  isToday ? "bg-gradient-to-b from-card to-mint-soft/40 ring-2 ring-primary/40" : ""
                 }`}
               >
                 <div className="space-y-2">
@@ -395,8 +391,8 @@ export function AdminMenusPage() {
 
       {menusQuery.isSuccess && viewMode === "month" && (
         <>
-          <div className="hidden overflow-hidden rounded-lg border border-border bg-card md:block">
-            <div className="grid grid-cols-7 border-b border-border bg-secondary/60 text-center text-xs font-semibold text-muted-foreground">
+          <div className="clay-card hidden overflow-hidden md:block">
+            <div className="grid grid-cols-7 border-b border-border bg-sky-soft/70 text-center text-xs font-semibold text-foreground/80">
               {["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"].map((d) => (
                 <div key={d} className="py-2.5">
                   {d}
@@ -457,7 +453,7 @@ export function AdminMenusPage() {
                 return (
                   <div
                     key={cell.iso}
-                    className="flex items-center justify-between gap-3 rounded-lg border border-border bg-card p-3.5"
+                    className="clay-card flex items-center justify-between gap-3 p-3.5"
                   >
                     <div className="min-w-0 flex-1">
                       <p className="text-xs text-muted-foreground">{formatDateId(cell.iso)}</p>
