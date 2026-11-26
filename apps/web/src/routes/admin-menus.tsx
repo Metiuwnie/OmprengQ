@@ -1,5 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createMenuSchema, type AuthUser, type CreateMenuInput } from "@mbg/shared";
+import {
+  ALLERGEN_LABELS,
+  createMenuSchema,
+  FOOD_CATEGORIES,
+  sumNutrientTotals,
+  type Allergen,
+  type AuthUser,
+  type CreateMenuInput,
+  type FoodCategory,
+} from "@mbg/shared";
 import {
   CalendarDays,
   ChevronLeft,
@@ -17,10 +26,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { saveMenuPortion } from "../features/admin/api/admin-api";
+import { FoodCombobox, type FoodOption } from "../features/admin/components/food-combobox";
 import { useCreateMenuMutation, useMenusQuery, useSppgList } from "../features/admin/hooks/use-menus";
+import { buildMenuNameFromFoods, generateNutritionFunFact } from "../features/admin/lib/fun-fact";
 import {
   formatDateId,
   formatMonthYearId,
+  getFoodCategoryLabel,
   getMonthCalendarCells,
   getWeekDates,
   shiftIsoDate,
@@ -39,6 +52,8 @@ export function AdminMenusPage() {
   const [anchorDate, setAnchorDate] = useState<string>(() => toIsoDate());
   const [selectedSppgId, setSelectedSppgId] = useState<string>(user.sppgId ?? "");
   const [createForDate, setCreateForDate] = useState<string | null>(null);
+  const [selectedFoods, setSelectedFoods] = useState<FoodOption[]>([]);
+  const [foodSelectionError, setFoodSelectionError] = useState<string | null>(null);
 
   const sppgQuery = useSppgList(isSuperAdmin);
   const sppgOptions = sppgQuery.data?.sppg;
@@ -95,7 +110,80 @@ export function AdminMenusPage() {
     },
   });
 
+  const orderedSelectedFoods = useMemo(() => {
+    const orderMap = new Map<string, number>(FOOD_CATEGORIES.map((cat, idx) => [cat, idx]));
+    return [...selectedFoods].sort(
+      (a, b) => (orderMap.get(a.category) ?? 99) - (orderMap.get(b.category) ?? 99),
+    );
+  }, [selectedFoods]);
+
+  const selectedFoodsByCategory = useMemo(() => {
+    const map = new Map<FoodCategory, FoodOption[]>();
+    for (const cat of FOOD_CATEGORIES) {
+      map.set(cat, []);
+    }
+    for (const food of selectedFoods) {
+      const list = map.get(food.category as FoodCategory);
+      if (list) list.push(food);
+    }
+    return map;
+  }, [selectedFoods]);
+
+  const derivedMenuName = useMemo(
+    () => buildMenuNameFromFoods(orderedSelectedFoods),
+    [orderedSelectedFoods],
+  );
+  const derivedFunFact = useMemo(
+    () => generateNutritionFunFact(orderedSelectedFoods),
+    [orderedSelectedFoods],
+  );
+  const totalNutrition = useMemo(
+    () =>
+      sumNutrientTotals(
+        orderedSelectedFoods.map((food) => ({
+          energyKcal: food.energyKcal,
+          proteinG: food.proteinG,
+          fatG: food.fatG,
+          carbG: food.carbG,
+          fiberG: food.fiberG,
+          ironMg: food.ironMg,
+        })),
+      ),
+    [orderedSelectedFoods],
+  );
+  const totalAllergens = useMemo(() => {
+    const found = new Set<Allergen>();
+    for (const food of orderedSelectedFoods) {
+      for (const allergen of food.allergens) {
+        found.add(allergen);
+      }
+    }
+    return Array.from(found);
+  }, [orderedSelectedFoods]);
+
+  const handleAddTkpiFood = (food: FoodOption) => {
+    setFoodSelectionError(null);
+    setSelectedFoods((prev) => {
+      if (prev.some((item) => item.id === food.id)) return prev;
+      const next = [...prev, food];
+      setValue("name", buildMenuNameFromFoods(next), { shouldValidate: true });
+      setValue("funFact", generateNutritionFunFact(next));
+      return next;
+    });
+  };
+
+  const handleRemoveTkpiFood = (foodId: string) => {
+    setSelectedFoods((prev) => {
+      const next = prev.filter((item) => item.id !== foodId);
+      setValue("name", buildMenuNameFromFoods(next), { shouldValidate: true });
+      setValue("funFact", generateNutritionFunFact(next));
+      return next;
+    });
+  };
+
   const openCreateForm = (date: string) => {
+    setSelectedFoods([]);
+    setFoodSelectionError(null);
     reset({
       sppgId: isSuperAdmin ? activeSppgId : undefined,
       date,
@@ -118,10 +206,27 @@ export function AdminMenusPage() {
   };
 
   const onSubmitCreate = async (values: CreateMenuInput) => {
+    if (selectedFoods.length === 0) {
+      setFoodSelectionError("Pilih minimal satu bahan dari daftar TKPI.");
+      return;
+    }
     const created = await createMutation.mutateAsync({
-      ...values,
+      date: values.date,
+      name: derivedMenuName,
+      description: values.description,
+      funFact: derivedFunFact || null,
+      photoUrl: null,
       sppgId: isSuperAdmin ? activeSppgId : undefined,
     });
+    // Pre-populate initial portion so admin doesn't have to re-pick the same TKPI foods.
+    await saveMenuPortion(
+      created.menu.id,
+      "sd_low",
+      orderedSelectedFoods.map((food) => ({
+        foodId: food.id,
+        grams: 100,
+      })),
+    );
     navigate(`/admin/menus/${created.menu.id}`);
   };
 
@@ -214,14 +319,125 @@ export function AdminMenusPage() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="create-name">Nama menu ringkas</Label>
-                <Input
-                  id="create-name"
-                  placeholder="Mis. Nasi, Ayam Goreng, Sayur Bayam, Pisang"
-                  aria-invalid={errors.name ? "true" : "false"}
-                  {...register("name")}
-                />
-                {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+                <FoodCombobox onSelect={handleAddTkpiFood} disabled={createMutation.isPending} />
+                {(foodSelectionError || errors.name) && (
+                  <p className="text-sm text-destructive">
+                    {foodSelectionError ?? errors.name?.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-3 sm:col-span-2">
+                {selectedFoods.length === 0 ? (
+                  <p className="rounded-md border border-dashed border-border bg-background/60 px-3.5 py-2.5 text-sm text-muted-foreground">
+                    Pilih bahan dari daftar TKPI di atas. Bahan yang dipilih akan dikelompokkan otomatis sesuai kategorinya.
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {FOOD_CATEGORIES.filter(
+                        (category) => (selectedFoodsByCategory.get(category)?.length ?? 0) > 0,
+                      ).map((category) => {
+                        const items = selectedFoodsByCategory.get(category) ?? [];
+                        return (
+                          <div
+                            key={category}
+                            className="space-y-2 rounded-xl border border-border/80 bg-background/60 p-3"
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-xs font-bold uppercase tracking-wide text-foreground">
+                                {getFoodCategoryLabel(category)}
+                              </span>
+                              <Badge variant="mint">{items.length}</Badge>
+                            </div>
+                            <ul className="space-y-1.5">
+                              {items.map((food) => (
+                                <li
+                                  key={food.id}
+                                  className="flex items-center justify-between gap-2 rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs"
+                                >
+                                  <div className="min-w-0">
+                                    <p className="truncate font-semibold text-foreground">
+                                      {food.name}
+                                    </p>
+                                    <p className="truncate tabular-nums text-muted-foreground">
+                                      {Math.round(food.energyKcal)} kkal · P{" "}
+                                      {food.proteinG.toFixed(1)}g · Serat {food.fiberG.toFixed(1)}g
+                                      · Besi {food.ironMg.toFixed(1)}mg
+                                    </p>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveTkpiFood(food.id)}
+                                    aria-label={`Hapus ${food.name}`}
+                                    className="inline-flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground"
+                                  >
+                                    <X className="h-3.5 w-3.5" aria-hidden="true" />
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <div className="rounded-xl border border-border/80 bg-mint-soft/40 p-3.5">
+                      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                        <span className="text-sm font-semibold text-foreground">
+                          Ringkasan Total Gizi Menu (estimasi per 100g tiap bahan)
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {selectedFoods.length} bahan terpilih
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+                        <div className="rounded-lg border border-border/70 bg-card px-3 py-2">
+                          <p className="text-[11px] text-muted-foreground">Energi</p>
+                          <p className="text-sm font-bold tabular-nums text-foreground">
+                            {Math.round(totalNutrition.energyKcal)} kkal
+                          </p>
+                        </div>
+                        <div className="rounded-lg border border-border/70 bg-card px-3 py-2">
+                          <p className="text-[11px] text-muted-foreground">Protein</p>
+                          <p className="text-sm font-bold tabular-nums text-foreground">
+                            {totalNutrition.proteinG.toFixed(1)} g
+                          </p>
+                        </div>
+                        <div className="rounded-lg border border-border/70 bg-card px-3 py-2">
+                          <p className="text-[11px] text-muted-foreground">Lemak</p>
+                          <p className="text-sm font-bold tabular-nums text-foreground">
+                            {totalNutrition.fatG.toFixed(1)} g
+                          </p>
+                        </div>
+                        <div className="rounded-lg border border-border/70 bg-card px-3 py-2">
+                          <p className="text-[11px] text-muted-foreground">Karbohidrat</p>
+                          <p className="text-sm font-bold tabular-nums text-foreground">
+                            {totalNutrition.carbG.toFixed(1)} g
+                          </p>
+                        </div>
+                        <div className="rounded-lg border border-border/70 bg-card px-3 py-2">
+                          <p className="text-[11px] text-muted-foreground">Serat</p>
+                          <p className="text-sm font-bold tabular-nums text-foreground">
+                            {totalNutrition.fiberG.toFixed(1)} g
+                          </p>
+                        </div>
+                        <div className="rounded-lg border border-border/70 bg-card px-3 py-2">
+                          <p className="text-[11px] text-muted-foreground">Zat Besi</p>
+                          <p className="text-sm font-bold tabular-nums text-foreground">
+                            {totalNutrition.ironMg.toFixed(1)} mg
+                          </p>
+                        </div>
+                      </div>
+                      {totalAllergens.length > 0 && (
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          <span className="font-semibold text-foreground">Alergen terdeteksi: </span>
+                          {totalAllergens.map((a) => ALLERGEN_LABELS[a]).join(", ")}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-1.5 sm:col-span-2">
@@ -233,34 +449,15 @@ export function AdminMenusPage() {
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <Label htmlFor="create-funfact">Fakta seru edukasi gizi (opsional)</Label>
-                <Input
-                  id="create-funfact"
-                  placeholder="Mis. Bayam kaya zat besi untuk menjaga semangat belajar!"
-                  {...register("funFact")}
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="create-photo">Tautan foto menu (opsional)</Label>
-                <Input
-                  id="create-photo"
-                  type="url"
-                  placeholder="https://…"
-                  aria-invalid={errors.photoUrl ? "true" : "false"}
-                  {...register("photoUrl")}
-                />
-                {errors.photoUrl && (
-                  <p className="text-sm text-destructive">{errors.photoUrl.message}</p>
-                )}
-              </div>
-
               <div className="flex flex-wrap justify-end gap-2 sm:col-span-2">
                 <Button type="button" variant="secondary" onClick={() => setCreateForDate(null)}>
                   Batal
                 </Button>
-                <Button type="submit" variant="primary" disabled={createMutation.isPending}>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  disabled={createMutation.isPending || selectedFoods.length === 0}
+                >
                   {createMutation.isPending ? "Membuat menu…" : "Simpan & Susun Bahan"}
                 </Button>
               </div>

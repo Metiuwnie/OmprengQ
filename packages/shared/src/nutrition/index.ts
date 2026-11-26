@@ -79,3 +79,5 @@ export function collectPortionAllergens(
   }
   return ALLERGENS.filter((a) => found.has(a));
 }
+
+export * from "./engine.js";

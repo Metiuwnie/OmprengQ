@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  ACTIVITIES,
   ALLERGENS,
   FOOD_CATEGORIES,
   LEVELS,
@@ -11,6 +12,7 @@ import {
 export const levelSchema = z.enum(LEVELS);
 export const roleSchema = z.enum(ROLES);
 export const sexSchema = z.enum(SEXES);
+export const activityLevelSchema = z.enum(ACTIVITIES);
 export const foodCategorySchema = z.enum(FOOD_CATEGORIES);
 export const mealSlotSchema = z.enum(MEAL_SLOTS);
 export const allergenSchema = z.enum(ALLERGENS);
@@ -22,7 +24,7 @@ export const healthResponseSchema = z.object({
 export type HealthResponse = z.infer<typeof healthResponseSchema>;
 
 export const loginInputSchema = z.object({
-  email: z.string().trim().toLowerCase().email("Format email tidak valid"),
+  email: z.string().trim().toLowerCase().min(1, "Username atau email wajib diisi"),
   password: z.string().min(1, "Kata sandi wajib diisi"),
 });
 
@@ -30,7 +32,7 @@ export type LoginInput = z.infer<typeof loginInputSchema>;
 
 export const authUserSchema = z.object({
   id: z.string(),
-  email: z.string().email(),
+  email: z.string().min(1),
   name: z.string(),
   role: roleSchema,
   sppgId: z.string().nullable(),
@@ -177,3 +179,61 @@ export const copyMenuSchema = z.object({
   targetDate: dateString,
 });
 export type CopyMenuInput = z.infer<typeof copyMenuSchema>;
+
+// ---------------------------------------------------------------------------
+// M4: Local child profile (never sent over network)
+// ---------------------------------------------------------------------------
+
+export const ChildProfileSchema = z.object({
+  id: z.string().trim().min(1, "ID profil wajib diisi").max(100),
+  nickname: z
+    .string()
+    .trim()
+    .min(1, "Nama panggilan wajib diisi")
+    .max(50, "Nama panggilan maksimal 50 karakter"),
+  age: z
+    .number({ invalid_type_error: "Usia harus berupa angka" })
+    .int("Usia harus bilangan bulat")
+    .min(4, "Usia minimal 4 tahun")
+    .max(18, "Usia maksimal 18 tahun"),
+  sex: sexSchema,
+  weightKg: z
+    .number({ invalid_type_error: "Berat badan harus berupa angka" })
+    .min(10, "Berat badan minimal 10 kg")
+    .max(120, "Berat badan maksimal 120 kg"),
+  heightCm: z
+    .number({ invalid_type_error: "Tinggi badan harus berupa angka" })
+    .min(80, "Tinggi badan minimal 80 cm")
+    .max(200, "Tinggi badan maksimal 200 cm"),
+  activity: activityLevelSchema,
+  allergies: z.array(allergenSchema).default([]),
+  dislikes: z.array(z.string().trim().min(1).max(60)).max(30).default([]),
+  level: levelSchema,
+  createdAt: z.string().min(1),
+  updatedAt: z.string().min(1),
+});
+export type ChildProfile = z.infer<typeof ChildProfileSchema>;
+
+export const ChildProfileInputSchema = ChildProfileSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type ChildProfileInput = z.infer<typeof ChildProfileInputSchema>;
+
+export const ProfileExportSchema = z.object({
+  schemaVersion: z.literal(1),
+  activeId: z.string().nullable().optional().default(null),
+  profiles: z.array(ChildProfileSchema),
+});
+export type ProfileExportPayload = z.infer<typeof ProfileExportSchema>;
+
+/** Validate a single child profile object with Zod. */
+export function validateChildProfile(input: unknown) {
+  return ChildProfileSchema.safeParse(input);
+}
+
+/** Validate an exported/imported `profil-gizi.json` payload with Zod. */
+export function validateProfileExport(input: unknown) {
+  return ProfileExportSchema.safeParse(input);
+}

@@ -1,4 +1,4 @@
-import type { Allergen } from "@mbg/shared";
+import type { Allergen, FoodCategory } from "@mbg/shared";
 import { Plus, Search } from "lucide-react";
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import { Input } from "@/components/ui/input";
@@ -25,10 +25,19 @@ export interface FoodOption {
 interface FoodComboboxProps {
   onSelect: (food: FoodOption) => void;
   disabled?: boolean;
+  category?: FoodCategory;
+  label?: string;
+  placeholder?: string;
 }
 
 /** Keyboard-accessible TKPI food search combobox with debounced server lookup. */
-export function FoodCombobox({ onSelect, disabled = false }: FoodComboboxProps) {
+export function FoodCombobox({
+  onSelect,
+  disabled = false,
+  category,
+  label = "Tambah bahan dari TKPI",
+  placeholder = "Cari nasi, ayam, telur, tempe, kangkung…",
+}: FoodComboboxProps) {
   const inputId = useId();
   const listboxId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -52,7 +61,7 @@ export function FoodCombobox({ onSelect, disabled = false }: FoodComboboxProps) 
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const foodsQuery = useFoodSearchQuery(debouncedQuery, undefined, 20);
+  const foodsQuery = useFoodSearchQuery(debouncedQuery, category, 20);
   const options: FoodOption[] = foodsQuery.data?.foods ?? [];
 
   const selectOption = (food: FoodOption) => {
@@ -90,7 +99,7 @@ export function FoodCombobox({ onSelect, disabled = false }: FoodComboboxProps) 
 
   return (
     <div ref={containerRef} className="relative space-y-1.5">
-      <Label htmlFor={inputId}>Tambah bahan dari TKPI</Label>
+      <Label htmlFor={inputId}>{label}</Label>
       <div className="relative">
         <Search
           className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
@@ -105,7 +114,7 @@ export function FoodCombobox({ onSelect, disabled = false }: FoodComboboxProps) 
           aria-activedescendant={open && options[activeIndex] ? `${listboxId}-${activeIndex}` : undefined}
           value={query}
           disabled={disabled}
-          placeholder="Cari nasi, ayam, telur, tempe, kangkung…"
+          placeholder={placeholder}
           className="pl-9"
           onFocus={() => setOpen(true)}
           onChange={(event) => {

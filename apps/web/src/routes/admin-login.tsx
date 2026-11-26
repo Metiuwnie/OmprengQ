@@ -129,9 +129,9 @@ export function AdminLoginPage() {
                   <Label htmlFor="admin-email">Email admin</Label>
                   <Input
                     id="admin-email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder="nama@sekolah.sch.id"
+                    type="text"
+                    autoComplete="username"
+                    placeholder="suadmin / admin"
                     aria-invalid={errors.email ? "true" : "false"}
                     aria-describedby={errors.email ? "admin-email-error" : undefined}
                     {...register("email")}

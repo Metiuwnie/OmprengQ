@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateMenuSchema, type Level, type PortionItemFormInput, type UpdateMenuInput } from "@mbg/shared";
-import { ArrowLeft, CheckCircle2, Copy, Send, Trash2 } from "lucide-react";
-import { useCallback, useState } from "react";
+import { ArrowLeft, CheckCircle2, Copy, Send, Sparkles, Trash2 } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +20,7 @@ import {
   useSavePortionMutation,
   useUpdateMenuMutation,
 } from "../features/admin/hooks/use-menus";
+import { buildMenuNameFromFoods, generateNutritionFunFact } from "../features/admin/lib/fun-fact";
 import { formatDateId, LEVEL_LABELS, shiftIsoDate } from "../features/admin/lib/labels";
 
 /** Menu editor page at `/admin/menus/:id` with live nutrition summary, publish & copy-to-date. */
@@ -66,6 +67,25 @@ export function AdminMenuEditorPage() {
     [],
   );
 
+  const savedTkpiFoods = useMemo(() => {
+    const portionsList = detailQuery.data?.portions ?? [];
+    return portionsList.flatMap((portion) =>
+      portion.items.map((item) => ({
+        name: item.foodName,
+        category: item.foodCategory,
+        energyKcal: item.foodEnergyKcal,
+        proteinG: item.foodProteinG,
+        fatG: item.foodFatG,
+        carbG: item.foodCarbG,
+        fiberG: item.foodFiberG,
+        ironMg: item.foodIronMg,
+      })),
+    );
+  }, [detailQuery.data?.portions]);
+
+  const autoMenuName = useMemo(() => buildMenuNameFromFoods(savedTkpiFoods), [savedTkpiFoods]);
+  const autoFunFact = useMemo(() => generateNutritionFunFact(savedTkpiFoods), [savedTkpiFoods]);
+
   if (detailQuery.isPending) {
     return (
       <div
@@ -103,12 +123,40 @@ export function AdminMenuEditorPage() {
 
   const handleSaveMeta = async (values: UpdateMenuInput) => {
     setActionFeedback(null);
-    await updateMutation.mutateAsync(values);
+    await updateMutation.mutateAsync({
+      date: values.date,
+      description: values.description,
+      name: autoMenuName || menu.name,
+      funFact: autoFunFact || menu.funFact || null,
+      photoUrl: null,
+    });
     setActionFeedback("Info menu berhasil diperbarui.");
   };
 
   const handleSavePortion = async (level: Level, items: PortionItemFormInput[]) => {
     await savePortionMutation.mutateAsync({ level, items });
+    const refreshed = await detailQuery.refetch();
+    const updatedFoods = (refreshed.data?.portions ?? []).flatMap((portion) =>
+      portion.items.map((item) => ({
+        name: item.foodName,
+        category: item.foodCategory,
+        energyKcal: item.foodEnergyKcal,
+        proteinG: item.foodProteinG,
+        fatG: item.foodFatG,
+        carbG: item.foodCarbG,
+        fiberG: item.foodFiberG,
+        ironMg: item.foodIronMg,
+      })),
+    );
+    const nextName = buildMenuNameFromFoods(updatedFoods);
+    const nextFunFact = generateNutritionFunFact(updatedFoods);
+    if (nextName) {
+      await updateMutation.mutateAsync({
+        name: nextName,
+        funFact: nextFunFact || null,
+        photoUrl: null,
+      });
+    }
   };
 
   const handlePublish = async () => {
@@ -227,13 +275,13 @@ export function AdminMenuEditorPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="edit-name">Nama menu</Label>
+                  <Label htmlFor="edit-name">Nama menu (otomatis dari bahan TKPI)</Label>
                   <Input
                     id="edit-name"
-                    aria-invalid={errors.name ? "true" : "false"}
-                    {...register("name")}
+                    readOnly
+                    value={autoMenuName || menu.name}
+                    className="bg-background/70 text-muted-foreground"
                   />
-                  {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
                 </div>
 
                 <div className="space-y-1.5 sm:col-span-2">
@@ -241,22 +289,16 @@ export function AdminMenuEditorPage() {
                   <Textarea id="edit-desc" {...register("description")} />
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label htmlFor="edit-funfact">Fakta seru edukasi gizi</Label>
-                  <Input id="edit-funfact" {...register("funFact")} />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="edit-photo">Tautan foto menu (opsional)</Label>
-                  <Input
-                    id="edit-photo"
-                    type="url"
-                    aria-invalid={errors.photoUrl ? "true" : "false"}
-                    {...register("photoUrl")}
-                  />
-                  {errors.photoUrl && (
-                    <p className="text-sm text-destructive">{errors.photoUrl.message}</p>
-                  )}
+                <div className="space-y-1.5 sm:col-span-2">
+                  <Label>Fakta seru edukasi gizi (otomatis dari bahan TKPI)</Label>
+                  <div className="flex items-start gap-2 rounded-md border border-border/80 bg-mint-soft/50 px-3.5 py-2.5 text-sm">
+                    <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                    <span className="text-foreground">
+                      {autoFunFact ||
+                        menu.funFact ||
+                        "Tambahkan bahan TKPI pada porsi di bawah untuk menghasilkan fakta edukasi gizi secara otomatis."}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="flex justify-end sm:col-span-2">

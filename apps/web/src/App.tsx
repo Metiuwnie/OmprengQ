@@ -39,6 +39,9 @@ const CalculatorPlaceholderPage = lazy(() =>
 const DevDesignPage = lazy(() =>
   import("@/routes/dev-design").then((m) => ({ default: m.DevDesignPage })),
 );
+const DevEnginePage = lazy(() =>
+  import("@/routes/dev-engine").then((m) => ({ default: m.DevEnginePage })),
+);
 
 const queryClient = new QueryClient();
 
@@ -75,6 +78,7 @@ export function App() {
               <Route path="*" element={<Navigate to="/admin" replace />} />
             </Route>
             <Route path="/dev/design" element={<DevDesignPage />} />
+            {import.meta.env.DEV && <Route path="/dev/engine" element={<DevEnginePage />} />}
           </Routes>
         </Suspense>
       </BrowserRouter>

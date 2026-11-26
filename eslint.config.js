@@ -40,4 +40,20 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "error",
     },
   },
+  {
+    files: ["apps/web/src/stores/profiles.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/lib/api", "**/api/**", "hono/client"],
+              message: "Aturan privasi M4: stores/profiles tidak boleh mengimpor klien API.",
+            },
+          ],
+        },
+      ],
+    },
+  },
 );
