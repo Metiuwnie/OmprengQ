@@ -8,8 +8,7 @@
 - [[Kanban-OmprengQ|Papan Kanban Progres OmprengQ]]
 - **Status saat ini:**
   - **Done:** `M0 — Setup Monorepo & Tooling` (CI hijau `6a8dab8`) + Redesign & polish UI/UX 3D Claymorphism (`ea77334`) + Penyempurnaan input menu harian TKPI & login username (`6e3f393`)
-  - **Review / Verifikasi:** `M1`, `M2`, `M3`, `M4` (seluruh unit test `@mbg/shared` 23/23, `@mbg/web` 14/14, `typecheck`, & `lint` lolos; tinggal cek manual browser/DevTools/Lighthouse)
-  - **Backlog:** `M5` – `M9` (berikutnya: `M5 — Kalkulator, Rekomendasi & Alergi`)
+  - **Review / Verifikasi:** `M1`, `M2`, `M3`, `M4`, `M5`, `M6`, `M7`, `M8`, `M9` (seluruh unit/integrasi test `@mbg/shared` 23/23, `@mbg/web` 35/35, `@mbg/api` 35/35, `typecheck`, `lint`, `build` PWA, grep kata terlarang `0`, & audit Hallmark lolos; tinggal cek manual E2E browser/Lighthouse/5 pengguna/deploy HTTPS)
 
 ## Panduan & Dokumen Inti
 

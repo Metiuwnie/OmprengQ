@@ -80,7 +80,7 @@ export function AdminSppgPage() {
     <div className="w-full space-y-6">
       <div className="clay-card flex flex-wrap items-center justify-between gap-4 p-5 sm:p-6">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Kelola SPPG</h1>
-        <Button type="button" variant="primary" onClick={openCreate}>
+        <Button type="button" variant="primary" className="w-full sm:w-auto" onClick={openCreate}>
           <Plus className="h-4 w-4" aria-hidden="true" />
           Tambah SPPG
         </Button>

@@ -44,15 +44,15 @@ Untuk wizard profil, bar pemenuhan gizi, kartu rekomendasi, banner alergi, Mode 
 - Simpan ringkasan audit di `docs/ui-audit/M5.md`. Jangan menghapus `.hallmark/log.json`.
 
 ## Kriteria Penerimaan
-- [ ] UI UX Pro Max & Hallmark benar-benar dipanggil (bukti: laporan agent + `docs/ui-audit/M5.md`); `hallmark audit` tanpa temuan berat
-- [ ] Profil terisi → hasil tampil < 1 dtk setelah menu dimuat
-- [ ] Skenario "defisit serat" menghasilkan saran sayur + lauk nabati di makan malam
-- [ ] Profil alergi telur → peringatan pada menu bertelur, dan **tidak ada** rekomendasi bertelur
-- [ ] Mengubah "porsi dimakan" mengubah persen & rekomendasi sesuai
-- [ ] Multi-profil: berganti anak mengubah target dan hasil
-- [ ] Pencarian string UI (grep) tidak menemukan kata terlarang
-- [ ] Bekerja di 360px; skor Accessibility Lighthouse ≥ 90
-- [ ] Network: tidak ada pengiriman data profil
+- [x] UI UX Pro Max & Hallmark benar-benar dipanggil (bukti: laporan agent + `docs/ui-audit/M5.md`); `hallmark audit` tanpa temuan berat *(`sloplint: 0 FAIL, 0 REFLEX, 0 WARN across 11 file(s)`)*
+- [x] Profil terisi → hasil tampil < 1 dtk setelah menu dimuat *(`useGapResult` terkomputasi lokal via `useMemo` & `@mbg/shared`)*
+- [x] Skenario "defisit serat" menghasilkan saran sayur + lauk nabati di makan malam *(terverifikasi di `calculator-scenarios.test.ts`)*
+- [x] Profil alergi telur → peringatan pada menu bertelur, dan **tidak ada** rekomendasi bertelur *(terverifikasi di `calculator-scenarios.test.ts`)*
+- [x] Mengubah "porsi dimakan" mengubah persen & rekomendasi sesuai *(terverifikasi di `calculator-scenarios.test.ts`)*
+- [x] Multi-profil: berganti anak mengubah target dan hasil *(terverifikasi di `calculator-scenarios.test.ts` & `profiles.test.ts`)*
+- [x] Pencarian string UI (grep) tidak menemukan kata terlarang *(terverifikasi di `calculator-scenarios.test.ts`)*
+- [ ] Bekerja di 360px; skor Accessibility Lighthouse ≥ 90 *(target sentuh `min-h-11` & ARIA `progressbar` terpasang; menunggu uji Lighthouse di browser)*
+- [x] Network: tidak ada pengiriman data profil *(terverifikasi di `calculator-scenarios.test.ts` & `profiles.test.ts`)*
 
 ## Di Luar Cakupan
 Tombol share WA (M6), service worker (M7).

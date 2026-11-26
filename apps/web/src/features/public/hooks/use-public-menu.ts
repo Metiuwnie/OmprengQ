@@ -6,7 +6,7 @@ export function usePublicTodayQuery(slug: string | undefined) {
     queryKey: ["public", "today", slug],
     queryFn: () => fetchPublicToday(slug!),
     enabled: Boolean(slug),
-    staleTime: 1000 * 60 * 5,
+    staleTime: 30_000,
     retry: (count, error) => !(error instanceof NotFoundError) && count < 1,
   });
 }
@@ -16,7 +16,7 @@ export function usePublicWeekQuery(slug: string | undefined, start?: string) {
     queryKey: ["public", "week", slug, start ?? "current"],
     queryFn: () => fetchPublicWeek(slug!, start),
     enabled: Boolean(slug),
-    staleTime: 1000 * 60 * 5,
+    staleTime: 30_000,
     retry: (count, error) => !(error instanceof NotFoundError) && count < 1,
   });
 }

@@ -31,13 +31,13 @@ Untuk tombol & dialog bagikan WhatsApp serta notifikasi 'Tersalin', **panggil UI
 - Simpan ringkasan audit di `docs/ui-audit/M6.md`. Jangan menghapus `.hallmark/log.json`.
 
 ## Kriteria Penerimaan
-- [ ] UI UX Pro Max & Hallmark benar-benar dipanggil (bukti: laporan agent + `docs/ui-audit/M6.md`); `hallmark audit` tanpa temuan berat
-- [ ] Satu klik membuka WhatsApp (mobile & web) dengan pesan terisi
-- [ ] Fallback salin berfungsi di browser tanpa `wa.me`
-- [ ] Tautan yang ditempel ke WhatsApp menampilkan judul & deskripsi (uji dengan tautan produksi/tunnel HTTPS)
-- [ ] Teks aman dari karakter spesial (`&`, `#`, baris baru) lewat encoding
-- [ ] Tautan di pesan membuka kalkulator dengan sekolah yang benar
-- [ ] Hari tanpa menu: tombol dinonaktifkan atau pesan netral
+- [x] UI UX Pro Max & Hallmark benar-benar dipanggil (bukti: laporan agent + `docs/ui-audit/M6.md`); `hallmark audit` tanpa temuan berat *(`sloplint: 0 FAIL, 0 REFLEX, 0 WARN across 3 file(s)`)*
+- [ ] Satu klik membuka WhatsApp (mobile & web) dengan pesan terisi *(tautan `https://wa.me/?text=...` terpasang di `ShareToWhatsApp`; menunggu uji klik di perangkat)*
+- [ ] Fallback salin berfungsi di browser tanpa `wa.me` *(salin clipboard + fallback textarea terpasang; menunggu uji di browser)*
+- [ ] Tautan yang ditempel ke WhatsApp menampilkan judul & deskripsi (uji dengan tautan produksi/tunnel HTTPS) *(endpoint `/api/og/s/:slug/hari-ini` lolos `og.test.ts` 3/3; menunggu uji tunnel HTTPS)*
+- [x] Teks aman dari karakter spesial (`&`, `#`, baris baru) lewat encoding *(terverifikasi di `whatsapp.test.ts` & `og.test.ts`)*
+- [x] Tautan di pesan membuka kalkulator dengan sekolah yang benar *(terverifikasi di `whatsapp.test.ts` & redirect `?to=kalkulator` di `og.test.ts`)*
+- [x] Hari tanpa menu: tombol dinonaktifkan atau pesan netral *(tombol `disabled={!menu}` di UI & pesan netral di `buildWhatsAppMessage`)*
 
 ## Di Luar Cakupan
 Integrasi WhatsApp Business API / pengiriman otomatis.

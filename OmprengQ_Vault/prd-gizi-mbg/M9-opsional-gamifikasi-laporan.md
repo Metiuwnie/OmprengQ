@@ -28,13 +28,13 @@ Untuk kuis, misi harian, lencana, kartu koleksi, dan grafik dasbor laporan, **pa
 - Simpan ringkasan audit di `docs/ui-audit/M9.md`. Jangan menghapus `.hallmark/log.json`.
 
 ## Kriteria Penerimaan
-- [ ] UI UX Pro Max & Hallmark benar-benar dipanggil (bukti: laporan agent + `docs/ui-audit/M9.md`); `hallmark audit` tanpa temuan berat
-- [ ] Kuis dibuat otomatis dari menu hari itu dan bekerja offline
-- [ ] Progress gamifikasi tersimpan per profil di perangkat, tanpa pengiriman ke server
-- [ ] `usage_events` tidak memuat data profil (diperiksa lewat review skema & payload)
-- [ ] Dasbor laporan menampilkan grafik dan bisa diekspor CSV/PDF
-- [ ] Tidak ada elemen kompetisi antar anak maupun poin terkait berat badan
-- [ ] Test: pembuat kuis, perhitungan streak, agregasi laporan
+- [x] UI UX Pro Max & Hallmark benar-benar dipanggil (bukti: laporan agent + `docs/ui-audit/M9.md`); `hallmark audit` tanpa temuan berat
+- [x] Kuis dibuat otomatis dari menu hari itu dan bekerja offline
+- [x] Progress gamifikasi tersimpan per profil di perangkat, tanpa pengiriman ke server
+- [x] `usage_events` tidak memuat data profil (diperiksa lewat review skema & payload)
+- [x] Dasbor laporan menampilkan grafik dan bisa diekspor CSV/PDF
+- [x] Tidak ada elemen kompetisi antar anak maupun poin terkait berat badan
+- [x] Test: pembuat kuis, perhitungan streak, agregasi laporan
 
 ## Prompt Siap Pakai
 ```text

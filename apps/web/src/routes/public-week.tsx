@@ -89,27 +89,32 @@ export function PublicWeekPage() {
     >
       <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 sm:pt-5 lg:px-8">
         <header className="clay-card flex flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-5">
-          <div className="min-w-0">
+          <div className="min-w-0 space-y-2">
             <Link
               to={`/s/${data.school.slug}/hari-ini`}
-              className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+              className="clay-pill inline-flex min-h-11 w-fit items-center gap-2 rounded-md bg-background px-4 text-sm font-semibold text-foreground transition-[transform,background-color] duration-150 hover:-translate-y-0.5 hover:bg-sky-soft/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
             >
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
               Kembali ke Menu Hari Ini
             </Link>
-            <h1 className="truncate text-2xl font-bold text-foreground">
+            <h1 className="text-xl font-bold leading-snug text-foreground sm:text-2xl">
               Jadwal Mingguan: {data.school.name}
             </h1>
           </div>
 
           {allowedLevels.length > 1 && (
-            <div role="group" aria-label="Pilih jenjang" className="clay-well flex flex-wrap gap-1 p-1">
+            <div
+              role="group"
+              aria-label="Pilih jenjang"
+              className="clay-well grid w-full grid-cols-2 gap-1 p-1 sm:flex sm:w-auto"
+            >
               {allowedLevels.map((lvl) => (
                 <Button
                   key={lvl}
                   type="button"
                   size="sm"
-                  variant={lvl === activeLevel ? "primary" : "ghost"}
+                  className="w-full sm:w-auto"
+                  variant={lvl === activeLevel ? "sky" : "ghost"}
                   onClick={() => {
                     setSelectedLevel(lvl);
                     writeStoredLevel(lvl);
@@ -124,31 +129,42 @@ export function PublicWeekPage() {
       </div>
 
       <main className="mx-auto max-w-7xl space-y-5 px-4 py-6 sm:px-6 lg:px-8">
-        <div className="clay-card flex flex-wrap items-center justify-between gap-2 p-3">
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="clay-card flex flex-col gap-2.5 p-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="grid w-full grid-cols-3 gap-1.5 sm:flex sm:w-auto sm:items-center sm:gap-2">
             <Button
               type="button"
               variant="secondary"
               size="sm"
+              className="w-full px-2 sm:w-auto sm:px-3"
               onClick={() => setWeekStart(shiftIsoDate(data.start, -7))}
             >
-              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-              Minggu Lalu
-            </Button>
-            <Button type="button" variant="secondary" size="sm" onClick={() => setWeekStart(undefined)}>
-              Minggu Ini
+              <ChevronLeft className="h-4 w-4 shrink-0" aria-hidden="true" />
+              <span className="sm:hidden">Lalu</span>
+              <span className="hidden sm:inline">Minggu Lalu</span>
             </Button>
             <Button
               type="button"
               variant="secondary"
               size="sm"
+              className="w-full px-2 sm:w-auto sm:px-3"
+              onClick={() => setWeekStart(undefined)}
+            >
+              <span className="sm:hidden">Ini</span>
+              <span className="hidden sm:inline">Minggu Ini</span>
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              className="w-full px-2 sm:w-auto sm:px-3"
               onClick={() => setWeekStart(shiftIsoDate(data.start, 7))}
             >
-              Minggu Depan
-              <ChevronRight className="h-4 w-4" aria-hidden="true" />
+              <span className="sm:hidden">Depan</span>
+              <span className="hidden sm:inline">Minggu Depan</span>
+              <ChevronRight className="h-4 w-4 shrink-0" aria-hidden="true" />
             </Button>
           </div>
-          <p className="px-2 text-sm font-semibold text-foreground">
+          <p className="w-full text-center text-sm font-semibold text-foreground sm:w-auto sm:px-2 sm:text-left">
             {formatDateId(data.start)} s.d. {formatDateId(data.end)}
           </p>
         </div>

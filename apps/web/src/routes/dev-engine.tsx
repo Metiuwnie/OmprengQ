@@ -125,7 +125,6 @@ const DEV_HOUSEHOLD_CATALOG: readonly HouseholdFoodCatalogItem[] = [
     allergens: [],
     mealSlots: ["sarapan", "makan_malam"],
     priceTier: 1,
-    emoji: "🍚",
   },
   {
     name: "Telur dadar",
@@ -141,7 +140,6 @@ const DEV_HOUSEHOLD_CATALOG: readonly HouseholdFoodCatalogItem[] = [
     allergens: ["telur"],
     mealSlots: ["sarapan", "makan_malam"],
     priceTier: 1,
-    emoji: "🍳",
   },
   {
     name: "Ayam panggang kecap",
@@ -157,7 +155,6 @@ const DEV_HOUSEHOLD_CATALOG: readonly HouseholdFoodCatalogItem[] = [
     allergens: [],
     mealSlots: ["makan_malam"],
     priceTier: 2,
-    emoji: "🍗",
   },
   {
     name: "Tempe bacem",
@@ -173,7 +170,6 @@ const DEV_HOUSEHOLD_CATALOG: readonly HouseholdFoodCatalogItem[] = [
     allergens: ["kedelai"],
     mealSlots: ["sarapan", "makan_malam"],
     priceTier: 1,
-    emoji: "🟫",
   },
   {
     name: "Sayur bayam bening",
@@ -189,7 +185,6 @@ const DEV_HOUSEHOLD_CATALOG: readonly HouseholdFoodCatalogItem[] = [
     allergens: [],
     mealSlots: ["sarapan", "makan_malam"],
     priceTier: 1,
-    emoji: "🥬",
   },
   {
     name: "Tumis kangkung",
@@ -205,7 +200,6 @@ const DEV_HOUSEHOLD_CATALOG: readonly HouseholdFoodCatalogItem[] = [
     allergens: [],
     mealSlots: ["makan_malam"],
     priceTier: 1,
-    emoji: "🥦",
   },
   {
     name: "Pepaya potong",
@@ -221,7 +215,6 @@ const DEV_HOUSEHOLD_CATALOG: readonly HouseholdFoodCatalogItem[] = [
     allergens: [],
     mealSlots: ["sarapan", "selingan", "makan_malam"],
     priceTier: 1,
-    emoji: "🍈",
   },
   {
     name: "Pisang ambon",
@@ -237,7 +230,6 @@ const DEV_HOUSEHOLD_CATALOG: readonly HouseholdFoodCatalogItem[] = [
     allergens: [],
     mealSlots: ["sarapan", "selingan", "makan_malam"],
     priceTier: 1,
-    emoji: "🍌",
   },
 ];
 
@@ -353,8 +345,8 @@ function ProfileGapCard({
         <div className="rounded-2xl border border-border bg-background/70 p-3 text-xs">
           <p className="font-semibold text-foreground">Pembagian sisa energi per waktu makan:</p>
           <p className="mt-1 tabular-nums text-muted-foreground">
-            Sarapan {Math.round(slots.sarapan.energyKcal)} kkal · Selingan{" "}
-            {Math.round(slots.selingan.energyKcal)} kkal · Makan malam{" "}
+            Sarapan {Math.round(slots.sarapan.energyKcal)} kkal, Selingan{" "}
+            {Math.round(slots.selingan.energyKcal)} kkal, Makan malam{" "}
             {Math.round(slots.makan_malam.energyKcal)} kkal
           </p>
         </div>
@@ -732,7 +724,8 @@ export function DevEnginePage() {
             <CardHeader>
               <CardTitle className="text-lg">Tambah Profil Anak (Lokal)</CardTitle>
               <CardDescription>
-                Hanya nama panggilan &amp; data antropometri dasar. Tanpa nama lengkap, alamat, atau IMT.
+                Hanya nama panggilan &amp; data antropometri dasar. Tanpa nama lengkap, alamat, atau
+                penilaian status tubuh klinis.
               </CardDescription>
             </CardHeader>
             <CardContent>

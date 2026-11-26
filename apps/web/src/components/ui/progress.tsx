@@ -25,7 +25,10 @@ export function Progress({ value, max = 100, label, className }: ProgressProps) 
         className="h-4 w-full overflow-hidden rounded-full border border-border bg-sky-soft p-0.5 shadow-[var(--shadow-clay-inset)]"
       >
         <div
-          className="h-full w-full origin-left rounded-full bg-primary shadow-xs transition-transform duration-300"
+          className={cn(
+            "h-full w-full origin-left rounded-full shadow-xs motion-safe:transition-transform motion-safe:duration-300 motion-reduce:transition-none",
+            percent >= 100 ? "bg-primary" : "bg-sky",
+          )}
           style={{ transform: `scaleX(${ratio})` }}
         />
       </div>

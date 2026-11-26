@@ -28,13 +28,13 @@ Untuk banner offline, toast pembaruan, tombol & panduan pasang aplikasi (termasu
 - Simpan ringkasan audit di `docs/ui-audit/M7.md`. Jangan menghapus `.hallmark/log.json`.
 
 ## Kriteria Penerimaan
-- [ ] UI UX Pro Max & Hallmark benar-benar dipanggil (bukti: laporan agent + `docs/ui-audit/M7.md`); `hallmark audit` tanpa temuan berat
-- [ ] Setelah satu kunjungan online, matikan jaringan → `/s/:slug/hari-ini`, `/s/:slug/minggu`, dan `/kalkulator` tetap terbuka dengan data terakhir
-- [ ] Kalkulator menghitung ulang offline (profil dari localStorage, engine di klien)
-- [ ] Lighthouse PWA: installable ✔ (HTTPS), ikon & manifest valid
-- [ ] Rute admin tidak tersimpan di cache offline; logout tidak meninggalkan data sensitif di cache
-- [ ] Update versi baru tidak merusak sesi pengguna yang sedang membuka kalkulator
-- [ ] Ukuran precache wajar (< ~1 MB gzip)
+- [x] UI UX Pro Max & Hallmark benar-benar dipanggil (bukti: laporan agent + `docs/ui-audit/M7.md`); `hallmark audit` tanpa temuan berat *(`sloplint: 0 FAIL, 0 REFLEX, 0 WARN across 5 file(s)`)*
+- [ ] Setelah satu kunjungan online, matikan jaringan → `/s/:slug/hari-ini`, `/s/:slug/minggu`, dan `/kalkulator` tetap terbuka dengan data terakhir *(SW `StaleWhileRevalidate` & prefetch `/week` + `/reference/*` terpasang; menunggu uji manual DevTools Offline)*
+- [x] Kalkulator menghitung ulang offline (profil dari localStorage, engine di klien) *(seluruh engine `@mbg/shared` & store `localStorage` berjalan lokal + lolos `calculator-scenarios.test.ts`)*
+- [ ] Lighthouse PWA: installable ✔ (HTTPS), ikon & manifest valid *(`dist/manifest.webmanifest` & ikon 192/512/maskable/apple-touch-icon terbangun; menunggu uji Lighthouse HTTPS)*
+- [x] Rute admin tidak tersimpan di cache offline; logout tidak meninggalkan data sensitif di cache *(`globIgnores: ["**/admin-*.js"]`, `navigateFallbackDenylist`, `NetworkOnly` auth/admin, & `removeQueries(["admin"])` saat logout)*
+- [x] Update versi baru tidak merusak sesi pengguna yang sedang membuka kalkulator *(`registerType: "prompt"` dengan toast manual "Muat ulang" di `PwaOverlays`)*
+- [x] Ukuran precache wajar (< ~1 MB gzip) *(`precache 52 entries (674.03 KiB)` raw)*
 
 ## Di Luar Cakupan
 Push notification, background sync, offline admin.

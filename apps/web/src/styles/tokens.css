@@ -35,6 +35,9 @@
   --color-mint: oklch(88% 0.105 148);
   --color-mint-soft: oklch(95.5% 0.032 148);
   --color-mint-deep: oklch(40% 0.13 148);
+  --color-sky: oklch(48% 0.145 238);
+  --color-sky-deep: oklch(37% 0.13 238);
+  --color-sky-foreground: oklch(99.5% 0.004 238);
   --color-sky-soft: oklch(93.5% 0.036 238);
   --color-sun-soft: oklch(96% 0.045 92);
   --color-focus: oklch(46% 0.15 235);
@@ -78,6 +81,11 @@
     0 4px 0 0 oklch(71% 0.16 84),
     inset 0 3px 6px oklch(97% 0.08 92 / 0.85),
     inset 0 -4px 8px oklch(72% 0.15 84 / 0.4);
+  --shadow-clay-sky:
+    0 10px 22px -6px oklch(48% 0.145 238 / 0.36),
+    0 4px 0 0 oklch(37% 0.13 238),
+    inset 0 3px 6px oklch(76% 0.1 238 / 0.65),
+    inset 0 -4px 8px oklch(34% 0.12 238 / 0.4);
   --shadow-mascot: drop-shadow(0 14px 18px oklch(35% 0.06 238 / 0.24));
 
   --font-display: "Baloo 2", ui-rounded, ui-sans-serif, system-ui, sans-serif;

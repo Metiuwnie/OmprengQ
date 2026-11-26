@@ -15,6 +15,8 @@ export default tseslint.config(
       "OmprengQ_Vault/**",
       "design-system/**",
       "docs/**",
+      "playwright-report/**",
+      "test-results/**",
     ],
   },
   {

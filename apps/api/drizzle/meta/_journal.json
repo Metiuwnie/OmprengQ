@@ -8,6 +8,13 @@
       "when": 1795447062620,
       "tag": "0000_reflective_cobalt_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1795676354137,
+      "tag": "0001_rapid_stryfe",
+      "breakpoints": true
     }
   ]
 }

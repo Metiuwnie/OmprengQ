@@ -170,6 +170,7 @@ export function AdminSchoolsPage() {
             <Button
               type="button"
               variant="primary"
+              className="w-full sm:w-auto"
               disabled={isSuperAdmin && !activeSppgId}
               onClick={openCreate}
             >

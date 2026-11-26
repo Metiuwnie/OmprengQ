@@ -1,6 +1,7 @@
 import type { AuthUser } from "@mbg/shared";
 import {
   Apple,
+  BarChart3,
   Building2,
   CalendarDays,
   LayoutDashboard,
@@ -26,6 +27,7 @@ function getPageTitle(pathname: string): string {
   if (pathname.startsWith("/admin/menus")) return "Menu Harian";
   if (pathname.startsWith("/admin/schools")) return "Sekolah & QR";
   if (pathname.startsWith("/admin/foods")) return "Bahan TKPI";
+  if (pathname.startsWith("/admin/reports")) return "Laporan";
   if (pathname.startsWith("/admin/sppg")) return "Kelola SPPG";
   return "Dashboard Admin";
 }
@@ -134,6 +136,21 @@ export function AdminLayout({ user }: AdminLayoutProps) {
           >
             <Apple className="h-4 w-4 shrink-0" aria-hidden="true" />
             <span>Bahan TKPI</span>
+          </NavLink>
+
+          <NavLink
+            to="/admin/reports"
+            onClick={() => setMobileMenuOpen(false)}
+            className={({ isActive }) =>
+              `flex min-h-11 items-center gap-3 rounded-md px-3.5 py-2 text-sm font-semibold transition-[transform,background-color,color,box-shadow] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 ${
+                isActive
+                  ? "bg-primary text-primary-foreground shadow-[var(--shadow-clay-primary)]"
+                  : "text-foreground hover:bg-sky-soft/80"
+              }`
+            }
+          >
+            <BarChart3 className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>Laporan</span>
           </NavLink>
 
           {user.role === "super_admin" && (

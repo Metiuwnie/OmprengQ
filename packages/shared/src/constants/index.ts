@@ -115,3 +115,12 @@ export const ACTIVITY_METS = {
   lari: 8,
 } as const;
 export type SportActivity = keyof typeof ACTIVITY_METS;
+
+/** Anonymous aggregate usage event types (M9; zero profile/identity data). */
+export const USAGE_EVENT_TYPES = [
+  "menu_view",
+  "share_wa",
+  "calculator_open",
+  "quiz_done",
+] as const;
+export type UsageEventType = (typeof USAGE_EVENT_TYPES)[number];

@@ -58,7 +58,7 @@ export function AdminLoginPage() {
       <ClaySkyDecor />
 
       <header className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8">
-        <div className="clay-card flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        <div className="clay-card flex items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <Link
             to="/"
             className="inline-flex min-h-11 items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
@@ -111,7 +111,7 @@ export function AdminLoginPage() {
                   ref={errorBannerRef}
                   role="alert"
                   tabIndex={-1}
-                  className="mb-5 flex items-start gap-2.5 rounded-md border border-destructive/40 bg-destructive/10 px-3.5 py-3 text-sm text-foreground"
+                  className="mb-4 flex items-start gap-2 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-4 text-sm text-foreground"
                 >
                   <AlertCircle
                     className="mt-0.5 h-4 w-4 shrink-0 text-destructive"
@@ -119,13 +119,13 @@ export function AdminLoginPage() {
                   />
                   <div>
                     <p className="font-semibold text-destructive">Belum berhasil masuk</p>
-                    <p className="mt-0.5 text-sm text-foreground">{loginMutation.error.message}</p>
+                    <p className="mt-1 text-sm text-foreground">{loginMutation.error.message}</p>
                   </div>
                 </div>
               )}
 
               <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   <Label htmlFor="admin-email">Email admin</Label>
                   <Input
                     id="admin-email"

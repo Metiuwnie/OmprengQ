@@ -35,6 +35,7 @@ export function useLogout() {
     mutationFn: logoutAdmin,
     onSuccess: () => {
       queryClient.setQueryData(AUTH_ME_QUERY_KEY, null);
+      queryClient.removeQueries({ queryKey: ["admin"] });
       navigate("/admin/login", { replace: true });
     },
   });

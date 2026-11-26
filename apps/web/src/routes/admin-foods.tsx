@@ -139,7 +139,7 @@ export function AdminFoodsPage() {
       <div className="clay-card p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Bahan Pangan TKPI</h1>
-          <Button type="button" variant="primary" onClick={openCreate}>
+          <Button type="button" variant="primary" className="w-full sm:w-auto" onClick={openCreate}>
             <Plus className="h-4 w-4" aria-hidden="true" />
             Tambah Bahan Custom
           </Button>

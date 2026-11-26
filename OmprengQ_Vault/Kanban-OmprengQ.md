@@ -6,11 +6,6 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] [[prd-gizi-mbg/M5-kalkulator-rekomendasi-alergi|M5 — Kalkulator, Rekomendasi & Alergi]]
-- [ ] [[prd-gizi-mbg/M6-generator-pesan-wa|M6 — Generator Pesan WA]]
-- [ ] [[prd-gizi-mbg/M7-pwa-offline-first|M7 — PWA Offline-First]]
-- [ ] [[prd-gizi-mbg/M8-polish-testing-deploy|M8 — Polish, Testing & Deploy]]
-- [ ] [[prd-gizi-mbg/M9-opsional-gamifikasi-laporan|M9 — Opsional: Gamifikasi & Laporan]]
 
 
 ## In Progress
@@ -19,10 +14,16 @@ kanban-plugin: board
 
 ## Review / Verifikasi
 
+- [ ] [[prd-gizi-mbg/M9-opsional-gamifikasi-laporan|M9 — Opsional: Gamifikasi & Laporan]] (`docs/ui-audit/M9.md`, `sloplint` 0 FAIL/0 REFLEX/0 WARN, `typecheck`, `lint`, `build`, `@mbg/web` 35/35, `@mbg/api` 35/35 lolos; tinggal cek visual & uji interaktif kuis/laporan di browser)
+
 - [ ] [[prd-gizi-mbg/M1-database-seed-auth|M1 — Database, Seed & Auth]] (`c4dbece`, `1b66c6d`; `db:migrate`, `db:seed` 2x, `typecheck`, `lint`, `build`, & seluruh test DB/auth/seed lolos; tinggal uji login di browser)
 - [ ] [[prd-gizi-mbg/M2-dasbor-admin-menu-gizi|M2 — Dasbor Admin & Menu Gizi]] (`4196382`, `6e3f393`; `typecheck`, `lint`, `build`, `admin.test.ts` 6/6, `fun-fact.test.ts` 3/3, & audit UI lolos; form buat menu diperbarui berbasis daftar TKPI + ringkasan total gizi)
 - [ ] [[prd-gizi-mbg/M3-menu-harian-publik-qr|M3 — Menu Harian Publik & QR]] (`5930f60`; `typecheck`, `lint`, `build`, `public.test.ts` 3/3, `date-timezone.test.ts` 3/3, & audit UI lolos; tinggal uji browser/Fast 3G/Mode Kelas/Lighthouse)
 - [ ] [[prd-gizi-mbg/M4-profil-lokal-dan-gap-engine|M4 — Profil Lokal & Gap Engine]] (`6e3f393`; TDD `engine.test.ts` 14/14, `profiles.test.ts` 5/5, aturan privasi ESLint, `typecheck`, & `lint` lolos; tinggal uji manual `/dev/engine` & DevTools Network di browser)
+- [ ] [[prd-gizi-mbg/M5-kalkulator-rekomendasi-alergi|M5 — Kalkulator, Rekomendasi & Alergi]] (`docs/ui-audit/M5.md`, `sloplint` 0 FAIL/0 REFLEX/0 WARN, `typecheck`, `lint`, `build`, `@mbg/shared` 23/23, `@mbg/web` 19/19 lolos; tinggal uji visual 360px/1280px & Lighthouse di browser)
+- [ ] [[prd-gizi-mbg/M6-generator-pesan-wa|M6 — Generator Pesan WA]] (`docs/ui-audit/M6.md`, `sloplint` 0 FAIL/0 REFLEX/0 WARN, `whatsapp.test.ts` 4/4, `og.test.ts` 3/3, `@mbg/api` 32/32 lolos; tinggal uji `wa.me`, salin di browser, & preview crawler HTTPS)
+- [ ] [[prd-gizi-mbg/M7-pwa-offline-first|M7 — PWA Offline-First]] (`docs/ui-audit/M7.md`, `sloplint` 0 FAIL/0 REFLEX/0 WARN, `precache 52 entries (674.03 KiB)`, `pwa-helpers.test.ts` 4/4, `typecheck`, `lint`, `build` lolos; tinggal uji DevTools Offline & Lighthouse PWA)
+- [ ] [[prd-gizi-mbg/M8-polish-testing-deploy|M8 — Polish, Testing & Deploy]] (`docs/ui-audit/M8.md`, `sloplint` 0 FAIL/0 REFLEX/0 WARN across 45 file, grep kata terlarang 0, `security.test.ts` lolos, Playwright E2E, `Dockerfile`, & `README.md` siap; tinggal uji E2E browser, Lighthouse, 5 pengguna, & deploy HTTPS)
 
 
 

@@ -68,6 +68,7 @@ export function useUpdateMenuMutation(menuId: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin", "menu", menuId] });
       qc.invalidateQueries({ queryKey: ["admin", "menus"] });
+      qc.invalidateQueries({ queryKey: ["public"] });
     },
   });
 }
@@ -80,6 +81,7 @@ export function useSavePortionMutation(menuId: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin", "menu", menuId] });
       qc.invalidateQueries({ queryKey: ["admin", "menus"] });
+      qc.invalidateQueries({ queryKey: ["public"] });
     },
   });
 }
@@ -91,6 +93,7 @@ export function usePublishMenuMutation(menuId: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin", "menu", menuId] });
       qc.invalidateQueries({ queryKey: ["admin", "menus"] });
+      qc.invalidateQueries({ queryKey: ["public"] });
     },
   });
 }
@@ -99,7 +102,10 @@ export function useCopyMenuMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: CopyMenuInput) => copyMenu(input),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin", "menus"] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin", "menus"] });
+      qc.invalidateQueries({ queryKey: ["public"] });
+    },
   });
 }
 
@@ -107,6 +113,9 @@ export function useDeleteMenuMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (payload: { id: string; confirm: boolean }) => deleteMenu(payload.id, payload.confirm),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin", "menus"] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin", "menus"] });
+      qc.invalidateQueries({ queryKey: ["public"] });
+    },
   });
 }

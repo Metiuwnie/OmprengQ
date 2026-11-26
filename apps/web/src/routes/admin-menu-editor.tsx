@@ -183,29 +183,35 @@ export function AdminMenuEditorPage() {
 
   return (
     <div className="w-full space-y-6">
-      <div className="clay-card space-y-4 p-5 sm:p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="clay-card space-y-4 p-4 sm:p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Link
             to="/admin/menus"
-            className="clay-pill inline-flex min-h-11 items-center gap-2 rounded-md bg-card px-3.5 text-sm font-semibold text-foreground hover:bg-sky-soft/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+            className="clay-pill inline-flex min-h-11 w-fit items-center gap-2 rounded-md bg-card px-4 text-sm font-semibold text-foreground hover:bg-sky-soft/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             Kembali ke Kalender Menu
           </Link>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant={menu.status === "published" ? "mint" : "accent"}>
-              {menu.status === "published" ? "Terbit" : "Draf"}
-            </Badge>
+          <div
+            className={`grid w-full gap-2 sm:w-auto ${
+              menu.status === "draft" && confirmDelete
+                ? "grid-cols-2 sm:grid-cols-3"
+                : menu.status === "draft" || confirmDelete
+                  ? "grid-cols-2"
+                  : "grid-cols-1"
+            }`}
+          >
             {menu.status === "draft" && (
               <Button
                 type="button"
                 variant="primary"
                 size="sm"
+                className="w-full whitespace-nowrap"
                 disabled={publishMutation.isPending || totalSavedItems === 0}
                 onClick={handlePublish}
               >
-                <Send className="h-4 w-4" aria-hidden="true" />
+                <Send className="h-4 w-4 shrink-0" aria-hidden="true" />
                 {publishMutation.isPending ? "Mempublikasikan…" : "Publikasikan"}
               </Button>
             )}
@@ -213,23 +219,37 @@ export function AdminMenuEditorPage() {
               type="button"
               variant="secondary"
               size="sm"
+              className="w-full whitespace-nowrap"
               disabled={deleteMutation.isPending}
               onClick={handleDelete}
             >
-              <Trash2 className="h-4 w-4 text-destructive" aria-hidden="true" />
+              <Trash2 className="h-4 w-4 shrink-0 text-destructive" aria-hidden="true" />
               {confirmDelete ? "Klik lagi untuk Hapus" : "Hapus"}
             </Button>
             {confirmDelete && (
-              <Button type="button" variant="ghost" size="sm" onClick={() => setConfirmDelete(false)}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="col-span-2 w-full whitespace-nowrap sm:col-span-1"
+                onClick={() => setConfirmDelete(false)}
+              >
                 Batal
               </Button>
             )}
           </div>
         </div>
 
-        <div className="space-y-1 border-t border-border/70 pt-4">
-          <p className="text-sm font-medium text-muted-foreground">{formatDateId(menu.date, true)}</p>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{menu.name}</h1>
+        <div className="space-y-2 border-t border-border/70 pt-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant={menu.status === "published" ? "mint" : "accent"}>
+              {menu.status === "published" ? "Terbit" : "Draf"}
+            </Badge>
+            <p className="text-sm font-medium text-muted-foreground">
+              {formatDateId(menu.date, true)}
+            </p>
+          </div>
+          <h1 className="text-xl font-bold leading-snug tracking-tight sm:text-3xl">{menu.name}</h1>
         </div>
       </div>
 
@@ -263,7 +283,7 @@ export function AdminMenuEditorPage() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit(handleSaveMeta)} className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   <Label htmlFor="edit-date">Tanggal penyajian</Label>
                   <Input
                     id="edit-date"
@@ -274,7 +294,7 @@ export function AdminMenuEditorPage() {
                   {errors.date && <p className="text-sm text-destructive">{errors.date.message}</p>}
                 </div>
 
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   <Label htmlFor="edit-name">Nama menu (otomatis dari bahan TKPI)</Label>
                   <Input
                     id="edit-name"
@@ -284,14 +304,14 @@ export function AdminMenuEditorPage() {
                   />
                 </div>
 
-                <div className="space-y-1.5 sm:col-span-2">
+                <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor="edit-desc">Deskripsi</Label>
                   <Textarea id="edit-desc" {...register("description")} />
                 </div>
 
-                <div className="space-y-1.5 sm:col-span-2">
+                <div className="space-y-2 sm:col-span-2">
                   <Label>Fakta seru edukasi gizi (otomatis dari bahan TKPI)</Label>
-                  <div className="flex items-start gap-2 rounded-md border border-border/80 bg-mint-soft/50 px-3.5 py-2.5 text-sm">
+                  <div className="flex items-start gap-2 rounded-md border border-border/80 bg-mint-soft/50 px-4 py-3 text-sm">
                     <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
                     <span className="text-foreground">
                       {autoFunFact ||
@@ -301,10 +321,16 @@ export function AdminMenuEditorPage() {
                   </div>
                 </div>
 
-                <div className="flex justify-end sm:col-span-2">
+                <div className="flex flex-col gap-2 border-t border-border/70 pt-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-xs font-medium text-muted-foreground">
+                    {isMetaDirty
+                      ? "Ada perubahan yang belum disimpan."
+                      : "Info menu sudah tersimpan."}
+                  </p>
                   <Button
                     type="submit"
-                    variant="secondary"
+                    variant="sky"
+                    className="w-full sm:w-auto"
                     disabled={!isMetaDirty || updateMutation.isPending}
                   >
                     {updateMutation.isPending ? "Menyimpan…" : "Simpan Info Menu"}
@@ -328,8 +354,8 @@ export function AdminMenuEditorPage() {
             <CardHeader>
               <CardTitle className="text-lg">Salin Menu ke Tanggal Lain</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-wrap items-end gap-3">
-              <div className="space-y-1.5">
+            <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-end">
+              <div className="space-y-2">
                 <Label htmlFor="copy-target-date">Tanggal tujuan</Label>
                 <Input
                   id="copy-target-date"
@@ -340,7 +366,8 @@ export function AdminMenuEditorPage() {
               </div>
               <Button
                 type="button"
-                variant="secondary"
+                variant="sky"
+                className="w-full sm:w-auto"
                 disabled={!effectiveCopyDate || copyMutation.isPending}
                 onClick={handleCopy}
               >

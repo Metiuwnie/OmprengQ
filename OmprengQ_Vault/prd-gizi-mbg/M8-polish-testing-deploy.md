@@ -51,14 +51,14 @@ Untuk **audit menyeluruh** seluruh antarmuka, **panggil UI UX Pro Max dan Hallma
 - Simpan ringkasan audit di `docs/ui-audit/M8.md`. Jangan menghapus `.hallmark/log.json`.
 
 ## Kriteria Penerimaan
-- [ ] UI UX Pro Max & Hallmark benar-benar dipanggil (bukti: laporan agent + `docs/ui-audit/M8.md`); `hallmark audit` tanpa temuan berat
-- [ ] 4 skenario E2E hijau di CI
-- [ ] Lighthouse mobile (rute publik): Performance ≥ 85, Accessibility ≥ 90, Best Practices ≥ 90, PWA installable
-- [ ] Aplikasi produksi dapat dibuka via HTTPS; QR cetak menuju domain produksi
-- [ ] Tidak ada secret di repo; `.env.example` mutakhir
-- [ ] Panduan pengguna admin tersedia
-- [ ] 5 uji pengguna selesai, temuan prioritas tinggi diperbaiki
-- [ ] Grep kata terlarang (label status gizi) bersih di seluruh `apps/web/src`
+- [x] UI UX Pro Max & Hallmark benar-benar dipanggil (bukti: laporan agent + `docs/ui-audit/M8.md`); `hallmark audit` tanpa temuan berat *(`sloplint: 0 FAIL, 0 REFLEX, 0 WARN across 45 file(s)`)*
+- [ ] 4 skenario E2E hijau di CI *(`playwright.config.ts` & `e2e/omprengq.spec.ts` siap; menunggu eksekusi browser Playwright & CI)*
+- [ ] Lighthouse mobile (rute publik): Performance ≥ 85, Accessibility ≥ 90, Best Practices ≥ 90, PWA installable *(menunggu uji Lighthouse di browser)*
+- [ ] Aplikasi produksi dapat dibuka via HTTPS; QR cetak menuju domain produksi *(`Dockerfile`, `.dockerignore`, & static serving Hono siap; menunggu deploy ke hosting HTTPS)*
+- [x] Tidak ada secret di repo; `.env.example` mutakhir *(`.env` ter-ignore, `.env.example` tersedia)*
+- [x] Panduan pengguna admin tersedia *(tertulis di `README.md`)*
+- [ ] 5 uji pengguna selesai, temuan prioritas tinggi diperbaiki *(menunggu uji pengguna nyata)*
+- [x] Grep kata terlarang (label status gizi) bersih di seluruh `apps/web/src` *(terverifikasi 0 temuan)*
 
 ## Prompt Siap Pakai
 ```text

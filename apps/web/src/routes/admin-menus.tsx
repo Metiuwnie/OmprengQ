@@ -242,6 +242,7 @@ export function AdminMenusPage() {
             <Button
               type="button"
               variant="primary"
+              className="w-full sm:w-auto"
               disabled={isSuperAdmin && !activeSppgId}
               onClick={() => openCreateForm(anchorDate)}
             >
@@ -345,7 +346,7 @@ export function AdminMenusPage() {
                             className="space-y-2 rounded-xl border border-border/80 bg-background/60 p-3"
                           >
                             <div className="flex items-center justify-between gap-2">
-                              <span className="text-xs font-bold uppercase tracking-wide text-foreground">
+                              <span className="text-xs font-bold text-foreground">
                                 {getFoodCategoryLabel(category)}
                               </span>
                               <Badge variant="mint">{items.length}</Badge>
@@ -361,9 +362,9 @@ export function AdminMenusPage() {
                                       {food.name}
                                     </p>
                                     <p className="truncate tabular-nums text-muted-foreground">
-                                      {Math.round(food.energyKcal)} kkal · P{" "}
-                                      {food.proteinG.toFixed(1)}g · Serat {food.fiberG.toFixed(1)}g
-                                      · Besi {food.ironMg.toFixed(1)}mg
+                                      {Math.round(food.energyKcal)} kkal, P{" "}
+                                      {food.proteinG.toFixed(1)}g, Serat {food.fiberG.toFixed(1)}g,
+                                      Besi {food.ironMg.toFixed(1)}mg
                                     </p>
                                   </div>
                                   <button
@@ -466,32 +467,59 @@ export function AdminMenusPage() {
         </Card>
       )}
 
-      <div className="clay-card flex flex-wrap items-center justify-between gap-3 p-3.5 sm:p-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <Button type="button" variant="secondary" size="sm" onClick={() => handleStep(-1)}>
-            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-            Sebelumnya
-          </Button>
-          <Button type="button" variant="secondary" size="sm" onClick={() => setAnchorDate(todayIso)}>
-            <CalendarDays className="h-4 w-4" aria-hidden="true" />
-            Hari Ini
-          </Button>
-          <Button type="button" variant="secondary" size="sm" onClick={() => handleStep(1)}>
-            Berikutnya
-            <ChevronRight className="h-4 w-4" aria-hidden="true" />
-          </Button>
-          <span className="px-2 text-sm font-semibold text-foreground">
+      <div className="clay-card flex flex-col gap-3 p-3.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:p-4">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+          <div className="grid grid-cols-3 gap-1.5 sm:flex sm:items-center sm:gap-2">
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              className="w-full px-2 sm:w-auto sm:px-3"
+              onClick={() => handleStep(-1)}
+            >
+              <ChevronLeft className="h-4 w-4 shrink-0" aria-hidden="true" />
+              <span className="sm:hidden">Lalu</span>
+              <span className="hidden sm:inline">Sebelumnya</span>
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              className="w-full px-2 sm:w-auto sm:px-3"
+              onClick={() => setAnchorDate(todayIso)}
+            >
+              <CalendarDays className="h-4 w-4 shrink-0" aria-hidden="true" />
+              Hari Ini
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              className="w-full px-2 sm:w-auto sm:px-3"
+              onClick={() => handleStep(1)}
+            >
+              <span className="sm:hidden">Depan</span>
+              <span className="hidden sm:inline">Berikutnya</span>
+              <ChevronRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+            </Button>
+          </div>
+          <span className="text-center text-sm font-semibold text-foreground sm:px-2 sm:text-left">
             {viewMode === "week"
               ? `${formatDateId(weekDates[0] ?? anchorDate)} – ${formatDateId(weekDates[6] ?? anchorDate)}`
               : formatMonthYearId(anchorYear, anchorMonth)}
           </span>
         </div>
 
-        <div role="group" aria-label="Mode kalender" className="flex items-center gap-1.5">
+        <div
+          role="group"
+          aria-label="Mode kalender"
+          className="grid w-full grid-cols-2 gap-1.5 sm:flex sm:w-auto sm:items-center"
+        >
           <Button
             type="button"
             variant={viewMode === "week" ? "primary" : "secondary"}
             size="sm"
+            className="w-full sm:w-auto"
             onClick={() => setViewMode("week")}
           >
             Mingguan
@@ -500,6 +528,7 @@ export function AdminMenusPage() {
             type="button"
             variant={viewMode === "month" ? "primary" : "secondary"}
             size="sm"
+            className="w-full sm:w-auto"
             onClick={() => setViewMode("month")}
           >
             Bulanan

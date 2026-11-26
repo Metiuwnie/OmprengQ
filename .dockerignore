@@ -1,0 +1,14 @@
+node_modules
+.git
+.env
+.env.*
+!.env.example
+.agents
+OmprengQ_Vault
+prd-gizi-mbg
+coverage
+dist
+.vite
+playwright-report
+test-results
+*.tsbuildinfo

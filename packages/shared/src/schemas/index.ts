@@ -7,6 +7,7 @@ import {
   MEAL_SLOTS,
   ROLES,
   SEXES,
+  USAGE_EVENT_TYPES,
 } from "../constants/index.js";
 
 export const levelSchema = z.enum(LEVELS);
@@ -237,3 +238,27 @@ export function validateChildProfile(input: unknown) {
 export function validateProfileExport(input: unknown) {
   return ProfileExportSchema.safeParse(input);
 }
+
+// ---------------------------------------------------------------------------
+// M9: Anonymous aggregate usage events & admin report filters
+// ---------------------------------------------------------------------------
+
+export const usageEventTypeSchema = z.enum(USAGE_EVENT_TYPES);
+
+/** Strictly accepts only schoolSlug, date, and event type (never profile/identity data). */
+export const usageEventInputSchema = z
+  .object({
+    schoolSlug: z.string().trim().min(1).max(120),
+    date: dateString,
+    type: usageEventTypeSchema,
+  })
+  .strict();
+export type UsageEventInput = z.infer<typeof usageEventInputSchema>;
+
+export const reportQuerySchema = z.object({
+  from: dateString.optional(),
+  to: dateString.optional(),
+  sppgId: z.string().uuid("ID SPPG tidak valid").optional(),
+  schoolId: z.string().uuid("ID sekolah tidak valid").optional(),
+});
+export type ReportQueryInput = z.infer<typeof reportQuerySchema>;

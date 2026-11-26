@@ -1,15 +1,32 @@
 import { zValidator } from "@hono/zod-validator";
-import { DATE_REGEX, type Allergen, type Level, type NutrientTotals } from "@mbg/shared";
-import { and, asc, eq, gt, gte, inArray, lte } from "drizzle-orm";
+import {
+  DATE_REGEX,
+  usageEventInputSchema,
+  type Allergen,
+  type FoodCategory,
+  type Level,
+  type NutrientTotals,
+} from "@mbg/shared";
+import { and, asc, eq, gt, gte, inArray, lte, sql } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
 import { getDb, type AppDatabase } from "../db/client.js";
-import { foods, menuItems, menuPortions, menus, schools } from "../db/schema/index.js";
+import {
+  akgReference,
+  foods,
+  householdFoods,
+  menuItems,
+  menuPortions,
+  menus,
+  schools,
+  usageEvents,
+} from "../db/schema/index.js";
 import { addDaysIso, getMondayOfWeek, getTodayInTimezone } from "../lib/date-timezone.js";
 import { zodErrorHook } from "../lib/validation.js";
 import { AppError } from "../middleware/error.js";
 
 const PUBLIC_CACHE_CONTROL = "public, max-age=300, stale-while-revalidate=600";
+const REFERENCE_CACHE_CONTROL = "public, max-age=3600, stale-while-revalidate=86400";
 
 const weekQuerySchema = z.object({
   start: z.string().regex(DATE_REGEX, "Format tanggal harus YYYY-MM-DD").optional(),
@@ -211,4 +228,57 @@ export const publicRoutes = new Hono()
         menus: hydrated,
       });
     },
-  );
+  )
+  .get("/reference/household-foods", async (c) => {
+    const database = getDb();
+    const rows = await database.select().from(householdFoods).orderBy(asc(householdFoods.name));
+    const foodsList = rows.map((row) => ({
+      id: row.id,
+      name: row.name,
+      category: row.category as FoodCategory,
+      urtLabel: row.urtLabel,
+      grams: Number(row.grams),
+      energyKcal: Number(row.energyKcal),
+      proteinG: Number(row.proteinG),
+      fatG: Number(row.fatG),
+      carbG: Number(row.carbG),
+      fiberG: Number(row.fiberG),
+      ironMg: Number(row.ironMg),
+      allergens: row.allergens,
+      mealSlots: row.mealSlots,
+      priceTier: Number(row.priceTier),
+      emoji: row.emoji ?? undefined,
+    }));
+    c.header("Cache-Control", REFERENCE_CACHE_CONTROL);
+    return c.json({ foods: foodsList });
+  })
+  .get("/reference/akg", async (c) => {
+    const database = getDb();
+    const rows = await database
+      .select()
+      .from(akgReference)
+      .orderBy(asc(akgReference.sex), asc(akgReference.ageMin));
+    c.header("Cache-Control", REFERENCE_CACHE_CONTROL);
+    return c.json({ akg: rows });
+  })
+  .post("/events", zValidator("json", usageEventInputSchema, zodErrorHook), async (c) => {
+    const { schoolSlug, date, type } = c.req.valid("json");
+    const database = getDb();
+    const school = await findActiveSchoolBySlug(database, schoolSlug);
+
+    await database
+      .insert(usageEvents)
+      .values({
+        schoolId: school.id,
+        date,
+        eventType: type,
+        count: 1,
+      })
+      .onDuplicateKeyUpdate({
+        set: {
+          count: sql`${usageEvents.count} + 1`,
+        },
+      });
+
+    return c.json({ ok: true as const }, 202);
+  });

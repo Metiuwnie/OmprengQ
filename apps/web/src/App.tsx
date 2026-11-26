@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { PwaOverlays } from "@/features/pwa/components/pwa-overlays";
 import { HomePage } from "@/routes/home";
 
 const AdminGuard = lazy(() =>
@@ -25,15 +26,23 @@ const AdminFoodsPage = lazy(() =>
 const AdminSppgPage = lazy(() =>
   import("@/routes/admin-sppg").then((m) => ({ default: m.AdminSppgPage })),
 );
+const AdminReportsPage = lazy(() =>
+  import("@/routes/admin-reports").then((m) => ({ default: m.AdminReportsPage })),
+);
 const PublicTodayPage = lazy(() =>
   import("@/routes/public-today").then((m) => ({ default: m.PublicTodayPage })),
 );
 const PublicWeekPage = lazy(() =>
   import("@/routes/public-week").then((m) => ({ default: m.PublicWeekPage })),
 );
-const CalculatorPlaceholderPage = lazy(() =>
-  import("@/routes/calculator-placeholder").then((m) => ({
-    default: m.CalculatorPlaceholderPage,
+const CalculatorPage = lazy(() =>
+  import("@/routes/calculator").then((m) => ({
+    default: m.CalculatorPage,
+  })),
+);
+const CalculatorProfilesPage = lazy(() =>
+  import("@/routes/calculator-profiles").then((m) => ({
+    default: m.CalculatorProfilesPage,
   })),
 );
 const DevDesignPage = lazy(() =>
@@ -41,6 +50,12 @@ const DevDesignPage = lazy(() =>
 );
 const DevEnginePage = lazy(() =>
   import("@/routes/dev-engine").then((m) => ({ default: m.DevEnginePage })),
+);
+const PrivacyPage = lazy(() =>
+  import("@/routes/privacy").then((m) => ({ default: m.PrivacyPage })),
+);
+const AboutPage = lazy(() =>
+  import("@/routes/about").then((m) => ({ default: m.AboutPage })),
 );
 
 const queryClient = new QueryClient();
@@ -61,12 +76,16 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <PwaOverlays />
         <Suspense fallback={<RouteFallback />}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/s/:slug/hari-ini" element={<PublicTodayPage />} />
             <Route path="/s/:slug/minggu" element={<PublicWeekPage />} />
-            <Route path="/kalkulator" element={<CalculatorPlaceholderPage />} />
+            <Route path="/kalkulator" element={<CalculatorPage />} />
+            <Route path="/kalkulator/profil" element={<CalculatorProfilesPage />} />
+            <Route path="/privasi" element={<PrivacyPage />} />
+            <Route path="/tentang" element={<AboutPage />} />
             <Route path="/admin/login" element={<AdminLoginPage />} />
             <Route path="/admin" element={<AdminGuard />}>
               <Route index element={<AdminPage />} />
@@ -74,6 +93,7 @@ export function App() {
               <Route path="menus/:id" element={<AdminMenuEditorPage />} />
               <Route path="schools" element={<AdminSchoolsPage />} />
               <Route path="foods" element={<AdminFoodsPage />} />
+              <Route path="reports" element={<AdminReportsPage />} />
               <Route path="sppg" element={<AdminSppgPage />} />
               <Route path="*" element={<Navigate to="/admin" replace />} />
             </Route>

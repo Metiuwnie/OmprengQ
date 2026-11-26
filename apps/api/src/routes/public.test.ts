@@ -142,4 +142,30 @@ describe("public routes (/api/public)", () => {
     expect(weekBody.menus).toHaveLength(1);
     expect(weekBody.menus[0]?.name).toBe("Nasi, Telur Rebus");
   });
+
+  it("returns public reference household-foods and akg tables with cache headers", async () => {
+    const foodsRes = await app.request("/api/public/reference/household-foods");
+    expect(foodsRes.status).toBe(200);
+    expect(foodsRes.headers.get("cache-control")).toContain("max-age=3600");
+    const foodsBody = (await foodsRes.json()) as {
+      foods: Array<{
+        name: string;
+        urtLabel: string;
+        energyKcal: number;
+        allergens: string[];
+        mealSlots: string[];
+      }>;
+    };
+    expect(foodsBody.foods.length).toBeGreaterThanOrEqual(40);
+    expect(typeof foodsBody.foods[0]?.energyKcal).toBe("number");
+    expect(Array.isArray(foodsBody.foods[0]?.mealSlots)).toBe(true);
+
+    const akgRes = await app.request("/api/public/reference/akg");
+    expect(akgRes.status).toBe(200);
+    expect(akgRes.headers.get("cache-control")).toContain("max-age=3600");
+    const akgBody = (await akgRes.json()) as {
+      akg: Array<{ sex: string; ageMin: number; ageMax: number; energyKcal: number }>;
+    };
+    expect(akgBody.akg).toHaveLength(10);
+  });
 });
