@@ -36,7 +36,7 @@ export function ProfileSwitcher({
 
   return (
     <div className="clay-card flex flex-wrap items-center justify-between gap-3 p-3 sm:px-4">
-      <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto py-0.5">
+      <div className="-mx-1 -my-3 flex min-w-0 flex-1 items-center gap-2 overflow-x-auto px-1 py-3">
         <span className="hidden items-center gap-1.5 px-1 text-xs font-semibold text-muted-foreground sm:inline-flex">
           <Users className="h-4 w-4 text-primary" aria-hidden="true" />
           Profil:

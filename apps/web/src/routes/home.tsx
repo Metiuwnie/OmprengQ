@@ -55,15 +55,57 @@ export function HomePage() {
           </Link>
 
           <nav aria-label="Navigasi utama" className="flex flex-wrap items-center gap-2.5">
-            <Link
-              to="/admin"
-              className="inline-flex min-h-11 items-center gap-1.5 rounded-md px-3 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:bg-sky-soft/60 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
-            >
-              <ShieldCheck className="h-4 w-4" aria-hidden="true" />
-              Dashboard Admin
-            </Link>
+            {isInstalled ? (
+              <Badge variant="mint" className="min-h-11 px-3.5 text-sm">
+                <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                Aplikasi Terpasang
+              </Badge>
+            ) : (
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                onClick={handleInstallClick}
+                className="min-h-11 px-4 text-sm"
+              >
+                <Download className="h-4 w-4" aria-hidden="true" />
+                Unduh Aplikasi
+              </Button>
+            )}
           </nav>
         </header>
+
+        {showInstallGuide && !isInstalled && (
+          <div
+            role="status"
+            className="clay-card mt-3 flex items-start justify-between gap-3 px-4 py-3 text-xs leading-relaxed text-foreground sm:px-6 sm:text-sm"
+          >
+            <div className="space-y-1">
+              <p className="font-bold text-foreground">Pasang OmprengQ ke Layar Utama</p>
+              {showIosGuide ? (
+                <p className="flex flex-wrap items-center gap-1 text-muted-foreground">
+                  <span>Di Safari iOS, ketuk ikon</span>
+                  <Share className="inline h-3.5 w-3.5 text-primary" aria-hidden="true" />
+                  <span>Bagikan lalu pilih Tambah ke Layar Utama.</span>
+                </p>
+              ) : (
+                <p className="text-muted-foreground">
+                  Buka menu browser (ikon titik tiga atau ikon pasang di bilah alamat), lalu pilih
+                  &ldquo;Instal aplikasi&rdquo; atau &ldquo;Tambah ke Layar Utama&rdquo; agar
+                  OmprengQ bisa dibuka langsung seperti aplikasi dan tetap jalan saat sinyal lemah.
+                </p>
+              )}
+            </div>
+            <button
+              type="button"
+              aria-label="Tutup panduan pasang aplikasi"
+              onClick={() => setShowInstallGuide(false)}
+              className="inline-flex min-h-11 min-w-11 shrink-0 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors duration-150 hover:bg-card/80 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+            >
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </div>
+        )}
       </div>
 
       <main className="relative z-10 mx-auto w-full max-w-7xl flex-1 space-y-10 px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -89,58 +131,7 @@ export function HomePage() {
                 Buka Kalkulator Gizi
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
-
-              {isInstalled ? (
-                <Badge variant="mint" className="min-h-12 px-4 text-sm">
-                  <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
-                  Aplikasi Terpasang
-                </Badge>
-              ) : (
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="lg"
-                  onClick={handleInstallClick}
-                  className="min-h-12 w-full sm:w-auto"
-                >
-                  <Download className="h-4 w-4 text-primary" aria-hidden="true" />
-                  Unduh Aplikasi
-                </Button>
-              )}
             </div>
-
-            {showInstallGuide && !isInstalled && (
-              <div
-                role="status"
-                className="clay-well flex items-start justify-between gap-3 p-4 text-xs leading-relaxed text-foreground sm:text-sm"
-              >
-                <div className="space-y-1">
-                  <p className="font-bold text-foreground">Pasang OmprengQ ke Layar Utama</p>
-                  {showIosGuide ? (
-                    <p className="flex flex-wrap items-center gap-1 text-muted-foreground">
-                      <span>Di Safari iOS, ketuk ikon</span>
-                      <Share className="inline h-3.5 w-3.5 text-primary" aria-hidden="true" />
-                      <span>Bagikan lalu pilih Tambah ke Layar Utama.</span>
-                    </p>
-                  ) : (
-                    <p className="text-muted-foreground">
-                      Buka menu browser (ikon titik tiga atau ikon pasang di bilah alamat), lalu
-                      pilih &ldquo;Instal aplikasi&rdquo; atau &ldquo;Tambah ke Layar Utama&rdquo;
-                      agar OmprengQ bisa dibuka langsung seperti aplikasi dan tetap jalan saat
-                      sinyal lemah.
-                    </p>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  aria-label="Tutup panduan pasang aplikasi"
-                  onClick={() => setShowInstallGuide(false)}
-                  className="inline-flex min-h-11 min-w-11 shrink-0 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors duration-150 hover:bg-card/80 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
-                >
-                  <X className="h-4 w-4" aria-hidden="true" />
-                </button>
-              </div>
-            )}
           </div>
 
           <aside
@@ -229,6 +220,13 @@ export function HomePage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            <Link
+              to="/admin"
+              className="clay-pill inline-flex min-h-11 items-center gap-1.5 rounded-md bg-card px-3.5 font-medium text-foreground transition-[transform,background-color] duration-150 hover:-translate-y-0.5 hover:bg-sky-soft/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+            >
+              <ShieldCheck className="h-4 w-4 text-primary" aria-hidden="true" />
+              Dashboard Admin
+            </Link>
             <Link
               to="/privasi"
               className="clay-pill inline-flex min-h-11 items-center rounded-md bg-card px-3.5 font-medium text-foreground transition-[transform,background-color] duration-150 hover:-translate-y-0.5 hover:bg-sky-soft/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"

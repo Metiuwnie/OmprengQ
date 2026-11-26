@@ -1,6 +1,6 @@
 import type { Allergen, Level } from "@mbg/shared";
 import { useQueryClient } from "@tanstack/react-query";
-import { AlertTriangle, Calculator, CalendarDays, RefreshCw } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Calculator, CalendarDays, RefreshCw } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ClaySkyDecor } from "@/components/clay-sky-decor";
@@ -154,11 +154,21 @@ export function PublicTodayPage() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 pt-4 sm:px-6 sm:pt-5 lg:px-8">
         <header className="clay-card flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5">
-          <div className="min-w-0">
-            <p className="truncate font-display text-xl font-bold leading-tight text-foreground">
-              {data.school.name}
-            </p>
-            <p className="truncate text-sm text-muted-foreground">{dateLabel}</p>
+          <div className="flex min-w-0 items-center gap-3">
+            <Link
+              to="/"
+              aria-label="Kembali ke Beranda"
+              className="clay-pill inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md bg-background px-3.5 text-sm font-semibold text-foreground transition-[transform,background-color] duration-150 hover:-translate-y-0.5 hover:bg-sky-soft/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              <span className="hidden sm:inline">Beranda</span>
+            </Link>
+            <div className="min-w-0">
+              <p className="truncate font-display text-xl font-bold leading-tight text-foreground">
+                {data.school.name}
+              </p>
+              <p className="truncate text-sm text-muted-foreground">{dateLabel}</p>
+            </div>
           </div>
 
           <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:items-center">

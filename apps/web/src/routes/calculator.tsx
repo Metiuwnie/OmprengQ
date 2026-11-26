@@ -92,14 +92,25 @@ export function CalculatorPage() {
       <ClaySkyDecor />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8">
-        <header className="clay-card flex items-center justify-between gap-2 px-4 py-4 sm:px-6">
-          <Link
-            to={schoolSlug ? `/s/${encodeURIComponent(schoolSlug)}/hari-ini` : "/"}
-            className="clay-pill inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md bg-background px-3.5 text-sm font-semibold text-foreground transition-[transform,background-color] duration-150 hover:-translate-y-0.5 hover:bg-sky-soft/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
-          >
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            <span>{schoolSlug ? "Menu Hari Ini" : "Beranda"}</span>
-          </Link>
+        <header className="clay-card flex flex-wrap items-center justify-between gap-2 px-4 py-4 sm:px-6">
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              to="/"
+              className="clay-pill inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md bg-background px-3.5 text-sm font-semibold text-foreground transition-[transform,background-color] duration-150 hover:-translate-y-0.5 hover:bg-sky-soft/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              <span>Beranda</span>
+            </Link>
+
+            {schoolSlug && (
+              <Link
+                to={`/s/${encodeURIComponent(schoolSlug)}/hari-ini`}
+                className="clay-pill inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md bg-card px-3.5 text-sm font-semibold text-foreground transition-[transform,background-color] duration-150 hover:-translate-y-0.5 hover:bg-sky-soft/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+              >
+                <span>Menu Hari Ini</span>
+              </Link>
+            )}
+          </div>
 
           <div className="flex items-center gap-2">
             {todayMenu.school && (
@@ -107,7 +118,13 @@ export function CalculatorPage() {
                 {todayMenu.school.name}
               </Badge>
             )}
-            <BrandLogo size="sm" />
+            <Link
+              to="/"
+              aria-label="Kembali ke Beranda OmprengQ"
+              className="inline-flex min-h-11 items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              <BrandLogo size="sm" />
+            </Link>
           </div>
         </header>
       </div>

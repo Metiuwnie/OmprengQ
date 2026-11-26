@@ -33,6 +33,60 @@ const TIMEZONE_LABELS: Record<SchoolTimezone, string> = {
   "Asia/Jayapura": "WIT (Asia/Jayapura)",
 };
 
+const QR_FRAME_SRC = "/mascots/mascot-ayam-qr-frame.jpg";
+// Inner white box coordinates inside the 1024x1024 mascot frame with comfortable quiet-zone padding.
+const QR_BOX_PCT = { left: 9.5, top: 36, width: 61, height: 55.5 } as const;
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Gagal memuat gambar QR."));
+    img.src = src;
+  });
+}
+
+async function downloadFramedQrPng(schoolId: string, slug: string): Promise<void> {
+  const [frameImg, qrImg] = await Promise.all([
+    loadImage(QR_FRAME_SRC),
+    loadImage(getSchoolQrUrl(schoolId, "png", 640)),
+  ]);
+
+  const size = 1024;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Canvas tidak didukung di browser ini.");
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, size, size);
+  ctx.drawImage(frameImg, 0, 0, size, size);
+
+  const boxLeft = (QR_BOX_PCT.left / 100) * size;
+  const boxTop = (QR_BOX_PCT.top / 100) * size;
+  const boxWidth = (QR_BOX_PCT.width / 100) * size;
+  const boxHeight = (QR_BOX_PCT.height / 100) * size;
+  const qrSide = Math.min(boxWidth, boxHeight);
+  const qrX = boxLeft + (boxWidth - qrSide) / 2;
+  const qrY = boxTop + (boxHeight - qrSide) / 2;
+
+  ctx.drawImage(qrImg, qrX, qrY, qrSide, qrSide);
+
+  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
+  if (!blob) throw new Error("Gagal membuat file PNG.");
+
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `qr-${slug}.png`;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
 /** Schools management and printable QR poster page at `/admin/schools`. */
 export function AdminSchoolsPage() {
   const { user } = useOutletContext<{ user: AuthUser }>();
@@ -152,7 +206,11 @@ export function AdminSchoolsPage() {
     if (!qrSchool) return;
     setQrFeedback(null);
     try {
-      await downloadSchoolQr(qrSchool.id, qrSchool.slug, format);
+      if (format === "png") {
+        await downloadFramedQrPng(qrSchool.id, qrSchool.slug);
+      } else {
+        await downloadSchoolQr(qrSchool.id, qrSchool.slug, format);
+      }
     } catch (error) {
       setQrFeedback(error instanceof Error ? error.message : "Gagal mengunduh QR.");
     }
@@ -351,13 +409,30 @@ export function AdminSchoolsPage() {
             </div>
           </CardHeader>
           <CardContent className="flex flex-col items-center gap-4 py-6 text-center">
-            <img
-              src={getSchoolQrUrl(qrSchool.id, "svg", 280)}
-              alt={`Kode QR menu harian ${qrSchool.name}`}
-              width={240}
-              height={240}
-              className="rounded-md border border-border bg-white p-3"
-            />
+            <div className="relative aspect-square w-full max-w-[360px] select-none overflow-hidden rounded-2xl bg-white">
+              <img
+                src={QR_FRAME_SRC}
+                alt="Bingkai maskot OmprengQ untuk kode QR"
+                width={1024}
+                height={1024}
+                className="h-full w-full object-contain"
+              />
+              <div
+                className="absolute flex items-center justify-center"
+                style={{
+                  left: `${QR_BOX_PCT.left}%`,
+                  top: `${QR_BOX_PCT.top}%`,
+                  width: `${QR_BOX_PCT.width}%`,
+                  height: `${QR_BOX_PCT.height}%`,
+                }}
+              >
+                <img
+                  src={getSchoolQrUrl(qrSchool.id, "svg", 512)}
+                  alt={`Kode QR menu harian ${qrSchool.name}`}
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+            </div>
             <div className="space-y-1">
               <p className="font-display text-2xl font-bold text-foreground">{qrSchool.name}</p>
               <p className="text-base font-medium text-foreground">
