@@ -43,13 +43,13 @@ type ProfileState = { profiles: ChildProfile[]; activeId: string | null; schemaV
 - Jangan tampilkan/menghitung IMT atau kategori status gizi.
 
 ## Kriteria Penerimaan
-- [ ] Semua kasus uji `04` §7 lolos; fungsi bersifat murni & deterministik
-- [ ] Profil bertahan setelah refresh dan restart browser
-- [ ] Bisa membuat ≥ 3 profil dan berganti aktif
-- [ ] Ekspor → hapus data → impor memulihkan profil identik
-- [ ] DevTools → Network: tidak ada request berisi data profil
-- [ ] Data rusak di localStorage tidak membuat aplikasi crash (reset aman)
-- [ ] `/dev/engine` menampilkan target, konsumsi MBG, persen, dan sisa untuk 4 profil contoh
+- [x] Semua kasus uji `04` §7 lolos; fungsi bersifat murni & deterministik (`packages/shared/src/nutrition/engine.test.ts` — 14/14 lolos)
+- [ ] Profil bertahan setelah refresh dan restart browser *(Zustand `persist` key `mbg.profiles.v1` terpasang; tinggal verifikasi manual di browser)*
+- [x] Bisa membuat ≥ 3 profil dan berganti aktif (`apps/web/src/stores/profiles.test.ts` lolos)
+- [x] Ekspor → hapus data → impor memulihkan profil identik (`apps/web/src/stores/profiles.test.ts` lolos)
+- [ ] DevTools → Network: tidak ada request berisi data profil *(aturan ESLint `no-restricted-imports` & test statis lolos; tinggal verifikasi manual DevTools)*
+- [x] Data rusak di localStorage tidak membuat aplikasi crash (reset aman) (`apps/web/src/stores/profiles.test.ts` lolos)
+- [x] `/dev/engine` menampilkan target, konsumsi MBG, persen, dan sisa untuk 4 profil contoh (`apps/web/src/routes/dev-engine.tsx`)
 
 ## Di Luar Cakupan
 UI kalkulator final, bar pemenuhan, ilustrasi (M5).

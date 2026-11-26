@@ -7,9 +7,9 @@
 
 - [[Kanban-OmprengQ|Papan Kanban Progres OmprengQ]]
 - **Status saat ini:**
-  - **Done:** `M0 — Setup Monorepo & Tooling` (CI hijau `6a8dab8`) + Redesign & polish UI/UX 3D Claymorphism (`ea77334`, `"fix ui ux"`)
-  - **Review / Verifikasi:** `M1`, `M2`, `M3` (`db:migrate`, `db:seed` 2x, `typecheck`, `lint`, `build`, dan seluruh `43/43` test di `14` file lolos; tinggal cek manual browser/DevTools/Lighthouse)
-  - **Backlog:** `M4` – `M9` (berikutnya: `M4 — Profil Lokal & Gap Engine`)
+  - **Done:** `M0 — Setup Monorepo & Tooling` (CI hijau `6a8dab8`) + Redesign & polish UI/UX 3D Claymorphism (`ea77334`) + Penyempurnaan input menu harian TKPI & login username (`6e3f393`)
+  - **Review / Verifikasi:** `M1`, `M2`, `M3`, `M4` (seluruh unit test `@mbg/shared` 23/23, `@mbg/web` 14/14, `typecheck`, & `lint` lolos; tinggal cek manual browser/DevTools/Lighthouse)
+  - **Backlog:** `M5` – `M9` (berikutnya: `M5 — Kalkulator, Rekomendasi & Alergi`)
 
 ## Panduan & Dokumen Inti
 
